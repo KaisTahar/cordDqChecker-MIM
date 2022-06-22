@@ -7,21 +7,29 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
 
   | Dimension  | Indicator Name|
   | ------------- | ------------- |
-  | completeness  | missing_item_rate, missing_value_rate, orphaCoding_completeness_rate  |
-  | plausibility  | outlier_rate, orphaCoding_plausibility_rate |
-  | uniqueness | rdCase_unambiguity_rate, duplication_rate|
-  | concordance | orphaCoding_rel_py_ipt, unambigous_rdCase_rel_py_ipat, tracerCase_rel_py_ipat|
+  | completeness  | item_completeness_rate_rate, value_completeness_rate, orphaCoding_completeness_rate  |
+  | plausibility  | orphaCoding_plausibility_rate, range_plausibility_rate |
+  | uniqueness |rdCase_unambiguity_rate, rdCase_dissimilarity_rate|
+  | concordance |rdCase_rel_py_ipat, tracerCase_rel_py_ipat|
 
 
   | Key number  | Name |
   | ------------- | ------------- |
-  | inpatient case number per year  |   case_no_p_ipat|
-  | case number per year |  case_no_py|
-  | patient number per year  |   patient_no_py|
-  | orpha code number per year  |  orphaCoding_no_py |
-  | RD case number per year  | rdCase_no_py  |
-  | Orpha-coded case number per year| orphaCase_no_py |
-  | unambigous-RD case number per year | unambigous_rdCase_no_py  |
+  | inpatient case number per year |  case_no_py_inpat|
+  | available case number per year |  case_no_py|
+  | patient number per year |   patient_no_py|
+  | orpha code number per year |  orphaCoding_no_py |
+  | RD case number per year | rdCase_no_py  |
+  | orpha-coded case number per year| orphaCase_no_py  |
+  | unambigous RD case number per year  | unambigous_rdCase_no_py  |
+  | tracer RD case number per year  | tracerCase_no_py  |
+  | missing item number per year |missing_item_no_py |
+  | missing value number per year |missing_value_no_py |
+  | missing Orpha number per year |orphaMissing_no_py|
+  | outlier number per year |outlier_no_py|
+  | implausible code link per year |implausible_codeLink_no_py|
+  | duplicate RD case number per year | duplicateRdCase_no_py|
+  
 - The data quality framework [`dqLib`](https://github.com/medizininformatik-initiative/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
   - The standard Alpha-ID-SE terminology [1]
@@ -57,11 +65,11 @@ Once the source data path and local variables are defined, start the script to c
 The genrated repots are saved in folder ``` "./Local/Data/Export" ```
 
 ## Local Reports
-Here are some [examples](https://github.com/medizininformatik-initiative/cord-dq-checker/tree/master/Local/Data/Export) of data quality reports generated locally using sythetic data.
+In the folder  ``` "./Local/Data/Export" ``` you will finde some examples of data quality reports generated locally using sythetic data.
 
 ## Note
 
-- Before starting `cordDqChecker.R` you need to install required libraries using this script [`installPackages.R`]( https://github.com/medizininformatik-initiative/cord-dq-checker/blob/master/Local/R/installPackages.R )
+- Before starting `cordDqChecker.R` you need to install required libraries using the script `installPackages.R` stored in ``` "./Local/R" ```
 
 - To avoid local dependency issues go to folder `./Local` and just run the command `sudo docker-compose up` to get `cordDqChecker` running.
 - The missing item rate will be calculated based on FHIR [implementation guidlines of the MII core data set](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set). Hence, mandatory items of the basic modules Person, Case and Diagnosis are required.
