@@ -38,8 +38,8 @@ path <- Sys.getenv("FHIR_SERVER")
 max_FHIRbundles <- Inf # Inf
 
 # CSV and XLSX file formats are supported
-exportFile = "DQ-Report_dqTestData"
-path="./Data/medData/dqTestData.csv"
+#exportFile = "DQ-Report_dqTestData"
+#path="./Data/medData/dqTestData.csv"
 #path="./Data/medData/dqTestData.xlsx"
 
 bItemCl <-"basicItem"
@@ -86,40 +86,6 @@ if (is.null(path) | path=="")  stop("No path to data") else {
 #filter for report year
 medData<- medData[format(as.Date(medData$Entlassungsdatum, format="%Y-%m-%d"),"%Y")==reportYear, ]
 if (is.empty(medData)) stop("No data available for reporting year:", reportYear)
-dItem <-names(medData)
-msg <-cat("\n The following data items are loaded: \n")
-print(paste(msg, dItem))
-
-#------------------------------------------------------------------------------------------------------
-# Import ref. Data
-#------------------------------------------------------------------------------------------------------
-refData1 <- read.table("./Data/refData/Tracerdiagnosen_AlphaID-SE-2022.csv", sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)
-refData2 <- read.table("./Data/refData/icd10gm2022_alphaidse_edvtxt.txt", sep="|", dec= "," , quote ="", na.strings=c("","NA"), encoding = "UTF-8")
-headerRef1<- c ("IcdCode", "Complete_SE", "Unique_SE")
-headerRef2<- c ("Gueltigkeit", "Alpha_ID", "ICD_Primaerkode1", "ICD_Manifestation", "ICD_Zusatz","ICD_Primaerkode2", "Orpha_Kode", "Label")
-names(refData1)<-headerRef1
-names(refData2)<-headerRef2
-
-#------------------------------------------------------------------------------------------------------
-# Import CORD data
-#------------------------------------------------------------------------------------------------------
-medData <- NULL
-if (is.null(path) | path=="")  stop("No path to data") else {
-  if (grepl("fhir", path))
-  {
-    source("./R/dqFhirInterface.R")
-    medData <-instData
-    
-  }else{ ext <-getFileExtension (path)
-  if (ext=="csv") medData <- read.table(path, sep=";", dec=",",  header=T, na.strings=c("","NA"), encoding = "latin1")
-  if (ext=="xlsx") medData <- read.xlsx(path, sheet=1,skipEmptyRows = TRUE)
-  }
-  if (is.null (medData)) stop("No data available")
-}
-#filter for report year
-medData<- medData[format(as.Date(medData$Entlassungsdatum, format="%Y-%m-%d"),"%Y")==reportYear, ]
-#medData<-medData[rowSums(is.na(medData)) != ncol(medData),]
-if (is.empty(medData) | is.null(medData)) stop("No data available for reporting year:", reportYear)
 dItem <-names(medData)
 msg <-cat("\n The following data items are loaded: \n")
 print(paste(msg, dItem))
@@ -193,6 +159,7 @@ if (!is.empty(medData$Institut_ID)){
   ################################################### DQ Reports ########################################################
   path<- paste ("./Data/Export/", exportFile, "_", dqRep$report_year,  sep = "")
   getReport( repCol, "dq_msg", dqRep, path)
+  
   top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
   msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
                 "\n Report year:", dqRep$report_year,
@@ -216,6 +183,7 @@ if (!is.empty(medData$Institut_ID)){
                "\n \n ########################################## Export ################################################")
   msg <- paste (msg, "\n \n For more infos about data quality indicators see the generated report \n >>> in the file path:", path)
   bottom <- paste ("\n ####################################***CordDqChecker***###########################################")
+  
   cat(paste (top, msg, bottom, sep="\n"))
 }else{
   msg <- paste ("Institut_ID fehlt")
