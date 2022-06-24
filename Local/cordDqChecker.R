@@ -49,7 +49,8 @@ cdata <- data.frame(
   basicItem= c("PatientIdentifikator","Aufnahmenummer", "Institut_ID",  "Geschlecht","PLZ", "Land","Kontakt_Klasse", "Fall_Status", "DiagnoseRolle", "ICD_Primaerkode","Orpha_Kode", "Total")
 )
 ddata <- data.frame(
-  basicItem= c ( "Geburtsdatum",  "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum", "Total")
+  basicItem= c ( "Geburtsdatum",  "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum", "Total"),
+  engLabel = c("birthdate", "admission date" , "discharge date", "diagnosis date", NA)
 )
 # optional items
 oItem = c("Orpha_Kode")
@@ -126,7 +127,7 @@ if (!is.empty(medData$Institut_ID)){
     concInd= c(
       "rdCase_rel_py_ipat",
       "tracerCase_rel_py_ipat",
-      "unambigous_rdCase_rel_py_ipat", 
+      "unambiguous_rdCase_rel_py_ipat", 
       "orphaCase_rel_py_ipat"
     )
     
@@ -139,14 +140,14 @@ if (!is.empty(medData$Institut_ID)){
       "orphaCoding_no_py",
       "rdCase_no_py",
       "orphaCase_no_py",
-      "unambigous_rdCase_no_py", 
+      "unambiguous_rdCase_no_py", 
       "tracerCase_no_py",
       "missing_item_no_py",
       "missing_value_no_py",
       "orphaMissing_no_py",
       "implausible_codeLink_no_py",
       "outlier_no_py",
-      "ambigous_rdCase_no_py", 
+      "ambiguous_rdCase_no_py", 
       "duplicateRdCase_no_py"
     )
     dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, concInd, dqKeyNo)
@@ -171,7 +172,7 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Coded rdCases:", dqRep$rdCase_no_py,
                 "\n Orpha number:", dqRep$orphaCoding_no_py,
                 "\n OrphaCoded rdCases:", dqRep$orphaCase_no_py,
-                "\n Unambigous rdCases:", dqRep$unambigous_rdCase_no_py,
+                "\n Unambiguous rdCases:", dqRep$unambiguous_rdCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
                 "\n Value completeness rate:", dqRep$value_completeness_rate,
                 "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
@@ -184,7 +185,7 @@ if (!is.empty(medData$Institut_ID)){
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")
   msg <- paste (msg, "\n \n For more infos about data quality indicators see the generated report \n >>> in the file path:", path)
-  bottom <- paste ("\n ####################################***CordDqChecker***###########################################")
+  bottom <- paste ("\n ####################################***CordDqChecker***###########################################\n")
   
   cat(paste (top, msg, bottom, sep="\n"))
 }else{
