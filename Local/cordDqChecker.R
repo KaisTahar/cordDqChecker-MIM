@@ -154,6 +154,8 @@ if (!is.empty(medData$Institut_ID)){
     out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem)
     dqRep <-out$metric
     mItem <-out$mItem
+    dqRep$rdCase_rel_py_ipat <- dqRep$rdCase_rel_py_ipat *1000
+    dqRep$tracerCase_rel_py_ipat <- dqRep$tracerCase_rel_py_ipat *1000
   }
   
   ################################################### DQ Reports ########################################################
@@ -166,8 +168,8 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Inpatient case:", dqRep$case_no_py_ipat,
                 "\n Case number:", dqRep$case_no_py,
                 "\n Patient number:", dqRep$patient_no_py,
-                "\n Orpha number:", dqRep$orphaCoding_no_py,
                 "\n Coded rdCases:", dqRep$rdCase_no_py,
+                "\n Orpha number:", dqRep$orphaCoding_no_py,
                 "\n OrphaCoded rdCases:", dqRep$orphaCase_no_py,
                 "\n Unambigous rdCases:", dqRep$unambigous_rdCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
@@ -178,7 +180,7 @@ if (!is.empty(medData$Institut_ID)){
                 "\n RdCase dissimilarity rate:", dqRep$rdCase_dissimilarity_rate,
                 "\n RdCase relative frequency:", dqRep$rdCase_rel_py_ipat)
   
-  if (dqRep$missing_item_no >0)   msg <- paste (msg, "\n Following items are missing:", toString(mItem))
+  if (dqRep$missing_item_no_py >0)   msg <- paste (msg, "\n Following items are missing:", toString(mItem))
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")
   msg <- paste (msg, "\n \n For more infos about data quality indicators see the generated report \n >>> in the file path:", path)
