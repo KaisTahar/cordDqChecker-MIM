@@ -21,7 +21,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | orpha code number per year |  orphaCoding_no_py |
   | RD case number per year | rdCase_no_py  |
   | orpha-coded case number per year| orphaCase_no_py  |
-  | unambigous RD case number per year  | unambigous_rdCase_no_py  |
+  | unambiguous RD case number per year  | unambiguous_rdCase_no_py  |
   | tracer RD case number per year  | tracerCase_no_py  |
   | missing item number per year |missing_item_no_py |
   | missing value number per year |missing_value_no_py |
