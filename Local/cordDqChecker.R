@@ -25,23 +25,23 @@ cat ("\n ####################################### Data Import ###################
 #------------------------------------------------------------------------------------------------------
 # Setting path and variables
 #------------------------------------------------------------------------------------------------------
-# Export file name
-exportFile = "DQ-Report_fhirTestData"
-# report year
-reportYear <-2020
-# inpatient case number
-Sys.setenv(INPATIENT_CASE_NO=10000)
 # path to fhir server
 Sys.setenv(FHIR_SERVER="http://141.5.101.1:8080/fhir/")
-inpatientCases <- as.numeric(Sys.getenv("INPATIENT_CASE_NO"))
 path <- Sys.getenv("FHIR_SERVER")
 max_FHIRbundles <- Inf # Inf
 
 # CSV and XLSX file formats are supported
-#exportFile = "DQ-Report_dqTestData"
 #path="./Data/medData/dqTestData.csv"
 #path="./Data/medData/dqTestData.xlsx"
 
+# Export file name
+exportFile = "DQ-Report_fhirTestData"
+#exportFile = "DQ-Report_dqTestData"
+# report year
+reportYear <-2020
+# inpatient case number
+Sys.setenv(INPATIENT_CASE_NO=10000)
+inpatientCases <- as.numeric(Sys.getenv("INPATIENT_CASE_NO"))
 bItemCl <-"basicItem"
 totalRow <-"Total"
 #defining mandatory and optional items
@@ -77,7 +77,7 @@ if (is.null(path) | path=="")  stop("No path to data") else {
   if (grepl("fhir", path))
   {
     source("./R/dqFhirInterface.R")
-    medData<- instData[ format(as.Date(instData$Entlassungsdatum, format="%Y-%m-%d"),"%Y")==reportYear, ]
+    medData<-instData
   }else{ ext <-getFileExtension (path)
   if (ext=="csv") medData <- read.table(path, sep=";", dec=",",  header=T, na.strings=c("","NA"), encoding = "latin1")
   if (ext=="xlsx") medData <- read.xlsx(path, sheet=1,skipEmptyRows = TRUE)
@@ -157,6 +157,8 @@ if (!is.empty(medData$Institut_ID)){
     mItem <-out$mItem
     dqRep$rdCase_rel_py_ipat <- dqRep$rdCase_rel_py_ipat *1000
     dqRep$tracerCase_rel_py_ipat <- dqRep$tracerCase_rel_py_ipat *1000
+    dqRep$orphaCase_rel_py_ipat <-  dqRep$orphaCase_rel_py_ipat *1000
+    dqRep$unambiguous_rdCase_rel_py_ipat <-  dqRep$unambiguous_rdCase_rel_py_ipat *1000
   }
   
   ################################################### DQ Reports ########################################################
@@ -192,3 +194,6 @@ if (!is.empty(medData$Institut_ID)){
   msg <- paste ("Institut_ID fehlt")
   stop(msg)
 }
+
+
+##########
