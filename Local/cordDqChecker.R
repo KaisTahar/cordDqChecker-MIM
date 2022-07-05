@@ -194,6 +194,3 @@ if (!is.empty(medData$Institut_ID)){
   msg <- paste ("Institut_ID fehlt")
   stop(msg)
 }
-
-
-##########
