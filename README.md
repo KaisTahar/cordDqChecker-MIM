@@ -1,34 +1,38 @@
 # cordDqChecker
 `CordDqChecker` is a Tool for data quality assessment and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
 
-Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: FKZ-01ZZ1911R.
+Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
-- The following indicators and key numbers are configured by default data quality reports:
-
-  | Dimension  | Indicator Name|
+- The following indicators and parameters are configured by default data quality reports:
+  | Dimension  | Data Quality Indicator Name | 
   | ------------- | ------------- |
-  | completeness  | item_completeness_rate_rate, value_completeness_rate, orphaCoding_completeness_rate  |
-  | plausibility  | orphaCoding_plausibility_rate, range_plausibility_rate |
-  | uniqueness |rdCase_unambiguity_rate, rdCase_dissimilarity_rate|
-  | concordance |rdCase_rel_py_ipat, tracerCase_rel_py_ipat|
+  | completeness  | item completeness rate, value completeness rate, orphaCoding completeness rate  | 
+  | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
+  | uniqueness |RD case unambiguity rate, RD case dissimilarity rate|
+  | concordance |concordance of RD cases, concordance of tracer cases| 
 
-
-  | Key number  | Name |
-  | ------------- | ------------- |
-  | inpatient case number per year |  case_no_py_inpat|
-  | available case number per year |  case_no_py|
-  | patient number per year |   patient_no_py|
-  | orpha code number per year |  orphaCoding_no_py |
-  | RD case number per year | rdCase_no_py  |
-  | orpha-coded case number per year| orphaCase_no_py  |
-  | unambiguous RD case number per year  | unambiguous_rdCase_no_py  |
-  | tracer RD case number per year  | tracerCase_no_py  |
-  | missing item number per year |missing_item_no_py |
-  | missing value number per year |missing_value_no_py |
-  | missing Orpha number per year |orphaMissing_no_py|
-  | outlier number per year |outlier_no_py|
-  | implausible code link per year |implausible_codeLink_no_py|
-  | duplicate RD case number per year | duplicateRdCase_no_py|
+  | No. | Data QualityParameter Name | Description |
+  |-----|--------------------------- | ------------|
+  |  P1 | missing data items |  number of missing data items per year |
+  |  P2 | mandatory data items | number of mandatory items per year |
+  |  P3 | missing data values| number of missing data values per year |
+  |  P4 | available data values | number of available data values per year |
+  |  P5 | missing orphacodes |  number of missing Orphacodes per year |
+  |  P6 | tracer diagnoses |  number of tracer RD diagnoses per year |
+  |  P7 | implausible links | number of implausible code links per year |
+  |  P8 | checked for outliers | number of checked data values for outliers per year |
+  |  P9 | outliers | number of detected outliers per year |
+  |  P10 | ambigous RD cases | number of ambigous RD cases per year |
+  |  P11 | RD cases | number of RD cases per year |
+  |  P13 | duplicated RD cases |  number of duplicated RD cases per year |
+  |  P14 | tracer cases |  number of tracer RD cases per year |
+  |  P15 | inpatient cases |  number of inpatient cases per year |
+  |  P16 | RD cases rel. frequency| relative frequency of inpatient RD cases per year |
+  |  P17 | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year |
+  |  P18 | available cases |  number of available cases per year |
+  |  P19 | available patients |  number of  available patients per year |
+  |  P20 | orphacodes | number of available orphacodes per year  |
+  |  P21 | orpha-coded cases | number of available orpha-coded cases per year|
   
 - The data quality framework [`dqLib`](https://github.com/medizininformatik-initiative/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
@@ -40,9 +44,11 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
     [2]   List of Tracer Diagnoses Extracted from Alpha-ID-SE Terminology [Internet]. 2022 [cited 2022May 24]. Available from: https://doi.org/21.11101/0000-0007-F6DF-9 
 
 ## Distributed Execution
-`cordDqChecker` was successfully tested using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/) and applied on synthetic data stored in multiple FHIR servers. The aggregated results are stored in folder `./PHT/Data/Export`. To create a PHT image run `./Dockerfile`.
+`cordDqChecker` was successfully tested using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/) and applied on synthetic data stored in multiple FHIR servers.  To create a PHT image run the command ` sudo docker build -t dq-train . `.
+The data used for evaluating distributed data quality assessments using PHT are stored in folder `./PHT/Data/ExperimentData`. The aggregated results are stored in folder `./PHT/Data/Export`.
+
 ## Cross-site Reports
-Here are [examples](https://github.com/medizininformatik-initiative/cord-dq-checker/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using sythetic data.
+Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using sythetic data.
   
 ## Local Execution
 To analyse your data quality locally go to folder `./Local` and run `cordDqChecker.R` to genrate data quality reports.
@@ -84,4 +90,5 @@ In the folder  ``` "./Local/Data/Export" ``` you will finde some examples of dat
 
   ```
 See also:  [`dqLib`](https://github.com/medizininformatik-initiative/dqLib)  [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD)
+
 
