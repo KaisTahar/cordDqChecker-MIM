@@ -6,14 +6,14 @@
 library(fhircrackr)
 
 #define fhir search request
-searchRequest_x <- paste0(
+searchRequest <- paste0(
   path,
   'Patient?',
   '&_revinclude=Encounter:patient',
   "&_revinclude=Condition:patient"
 )
 
-searchRequest <- paste0(
+searchRequestx <- paste0(
   path,
   'Patient?',
   '_has:Condition:patient:recorded-date=ge2020-01-01',
@@ -136,7 +136,6 @@ names(condAlphaID) <- c("PatientIdentifikator","Aufnahmenummer", "Diagnosetext",
 # join condition data
 if (!(is.null(condIcd)|is.null (condOrpha)|is.null(condAlphaID))) conditions <-Reduce(function(x, y) base::merge(x, y, all=T), list(condIcd,condOrpha, condAlphaID)) else
   if (!(is.null(condIcd)|is.null (condOrpha))) conditions <-Reduce(function(x, y) base::merge(x, y, all=T), list(condIcd,condOrpha)) else conditions <- condIcd
-
 # convert and save fhir bundles to a data frame patRaw
 patRaw <- fhirRaw$PatientTab
 patients <- fhir_rm_indices(patRaw, brackets = c("[", "]"))

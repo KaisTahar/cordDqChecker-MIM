@@ -29,7 +29,6 @@ cat ("\n ####################################### Data Import ###################
 Sys.setenv(FHIR_SERVER="http://141.5.101.1:8080/fhir/")
 path <- Sys.getenv("FHIR_SERVER")
 max_FHIRbundles <- Inf # Inf
-
 # CSV and XLSX file formats are supported
 #path="./Data/medData/dqTestData.csv"
 #path="./Data/medData/dqTestData.xlsx"
