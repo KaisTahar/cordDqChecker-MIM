@@ -11,7 +11,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | uniqueness |RD case unambiguity rate, RD case dissimilarity rate|
   | concordance |concordance of RD cases, concordance of tracer cases| 
   
- |Data QualityParameter Name | Description |
+  |Data QualityParameter Name | Description |
   |-------------------------- | ------------|
   | missing data items |  number of missing data items per year |
   | missing data values| number of missing data values per year |
