@@ -3,15 +3,15 @@
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
-- The following indicators and parameters are configured by default data quality reports:
-  | Dimension  | Data Quality Indicator Name | 
+- The following data quality indicators and parameters are configured by default data quality reports:
+  | Dimension  | Indicator Name | 
   | ------------- | ------------- |
   | completeness  | item completeness rate, value completeness rate, orphaCoding completeness rate  | 
   | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
   | uniqueness |RD case unambiguity rate, RD case dissimilarity rate|
   | concordance |concordance of RD cases, concordance of tracer cases| 
   
-  |Data QualityParameter Name | Description |
+  |Parameter Name | Description |
   |-------------------------- | ------------|
   | missing data items |  number of missing data items per year |
   | missing data values| number of missing data values per year |
