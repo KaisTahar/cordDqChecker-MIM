@@ -39,16 +39,17 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   - The standard Alpha-ID-SE terminology [1]
   - A reference for tracer diagnoses such as the list provided in [2].
   
-    [1]   BfArM - Alpha-ID-SE [Internet]. [cited 2022 May 23]. Available from: https://www.bfarm.de/EN/Code-systems/Terminologies/Alpha-ID-SE/_node.html 
+	[1]   BfArM - Alpha-ID-SE [Internet]. [cited 2022 May 23]. Available from: https://www.bfarm.de/EN/Code-systems/Terminologies/Alpha-ID-SE/_node.html 
     
-    [2]   List of Tracer Diagnoses Extracted from Alpha-ID-SE Terminology [Internet]. 2022 [cited 2022May 24]. Available from: https://doi.org/21.11101/0000-0007-F6DF-9 
+	[2]   List of Tracer Diagnoses Extracted from Alpha-ID-SE Terminology [Internet]. 2022 [cited 2022May 24]. Available from: https://doi.org/21.11101/0000-0007-F6DF-9 
 
 ## Distributed Execution
 `cordDqChecker` was successfully tested using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/) and applied on synthetic data stored in multiple FHIR servers.  To create a PHT image run the command ` sudo docker build -t dq-train . `.
-The data used for evaluating distributed data quality assessments using PHT are stored in folder `./PHT/Data/ExperimentData`. The aggregated results are stored in folder `./PHT/Data/Export`.
+The data used for evaluating our methodology for distributed data quality assessments are stored in folder `./PHT/Data/ExperimentData`. The aggregated results are stored in folder `./PHT/Data/Export`.
 
 ## Cross-site Reports
-Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using sythetic data.
+- Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using sythetic data.
+- The used references are store in the folder ``` "./PHT/Data/refData" ```
   
 ## Local Execution
 To analyse your data quality locally go to folder `./Local` and run `cordDqChecker.R` to genrate data quality reports.
@@ -71,7 +72,8 @@ Once the source data path and local variables are defined, start the script to c
 The genrated repots are saved in folder ``` "./Local/Data/Export" ```
 
 ## Local Reports
-In the folder  ``` "./Local/Data/Export" ``` you will finde some examples of data quality reports generated locally using sythetic data.
+- In the folder  ``` "./Local/Data/Export" ``` you will finde some examples of data quality reports generated locally using sythetic data.
+- The used references are stored in ``` "./Local/Data/refData" ```
 
 ## Note
 
