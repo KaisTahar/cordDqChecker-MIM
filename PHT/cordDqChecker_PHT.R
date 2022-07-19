@@ -119,9 +119,7 @@ if (!is.empty(medData$Institut_ID)){
     # select DQ indicators for concordance
     concInd= c(
       "rdCase_rel_py_ipat",
-      "tracerCase_rel_py_ipat",
-      "unambiguous_rdCase_rel_py_ipat", 
-      "orphaCase_rel_py_ipat"
+      "tracerCase_rel_py_ipat"
     )
     
     ############ Selection of DQ key numbers ########################
