@@ -25,7 +25,6 @@ cat ("\n ####################################### Data Import ###################
 # Setting path and variables
 #------------------------------------------------------------------------------------------------------
 # Export file name
-#exportFile = "DQ-Report_fhirTestData"
 exportFile = "DQ-Results_PHT"
 # report year
 reportYear <-2020
@@ -162,7 +161,6 @@ if (!is.empty(medData$Institut_ID)){
   dqRep$rdCase_con <- NA
   dqRep$tracerCase_con<- NA
   
-  
   if (file.exists (path)){
     cat("previous file exists.")
     prev_df <- read.csv(path)
@@ -173,8 +171,8 @@ if (!is.empty(medData$Institut_ID)){
     if (index >=3)
     { 
       while  (index >0) {
-        dqRepMerg$rdCase_con[index]<-  round (((dqRepMerg$rdCase_rel_py_ipat[index]- mean(x))/sd(x)),2)
-        dqRepMerg$tracerCase_con [index]<- round (((dqRepMerg$tracerCase_rel_py_ipat[index]- mean(y))/sd(y)),2)
+        dqRepMerg$rdCase_con[index]<-getConcIndicator(dqRepMerg$rdCase_rel_py_ipat, index)
+        dqRepMerg$tracerCase_con[index]<- getConcIndicator(dqRepMerg$tracerCase_rel_py_ipat, index)
         index =index -1
       }
       
