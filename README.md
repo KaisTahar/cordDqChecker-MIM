@@ -39,8 +39,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
 	[2]   List of Tracer Diagnoses Extracted from Alpha-ID-SE Terminology [Internet]. 2022 [cited 2022May 24]. Available from: https://doi.org/21.11101/0000-0007-F6DF-9 
 
 ## Distributed Execution
-`cordDqChecker` was successfully tested using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/) and applied on synthetic data stored in multiple FHIR servers.  To create a PHT image run the command ` sudo docker build -t dq-train . `.
-The data used for evaluating our methodology for distributed data quality assessments are stored in the folder `./PHT/Data/ExperimentData`. The aggregated results are stored in `./PHT/Data/Export`.
+We applied our methodology for distributed data quality assessments on synthetic data stored in multiple FHIR servers (see [data curation](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Experiment)). `cordDqChecker` was successfully tested and validated using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/). To create a  PHT image run the command ` sudo docker build -t dq-train .`. The FHIR data sets and tools used for data curation are stored in the folder `./PHT/Data/Experiment`. The aggregated results are stored in `./PHT/Data/Export`.
 
 ## Cross-site Reports
 - Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using sythetic data.
@@ -60,7 +59,7 @@ For Example you can define your path as following:
 - The default values of local variables are set as follows:
   - ``` reportYear=2020 ```
   - ``` max_FHIRbundles=50 ```
-  - ``` INPATIENT_CASE_NO=10000 ```
+  - ``` INPATIENT_CASE_NO=997 ```
   - ```path="http://141.5.101.1:8080/fhir/``` 
 
 Once the source data path and local variables are defined, start the script to check the quality of your data.
