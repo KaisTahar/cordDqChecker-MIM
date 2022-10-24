@@ -26,7 +26,7 @@ cat ("\n ####################################### Data Import ###################
 # Setting path and variables
 #------------------------------------------------------------------------------------------------------
 # path to fhir server
-Sys.setenv(FHIR_SERVER="http://141.5.101.1:8080/fhir/")
+Sys.setenv(FHIR_SERVER="http://141.5.101.1:8080/fhir/") #Airolo
 path <- Sys.getenv("FHIR_SERVER")
 max_FHIRbundles <- Inf # Inf
 # CSV and XLSX file formats are supported
@@ -39,7 +39,7 @@ exportFile = "DQ-Report_fhirTestData"
 # report year
 reportYear <-2020
 # inpatient case number
-Sys.setenv(INPATIENT_CASE_NO=10000)
+Sys.setenv(INPATIENT_CASE_NO=997)#Airolo
 inpatientCases <- as.numeric(Sys.getenv("INPATIENT_CASE_NO"))
 bItemCl <-"basicItem"
 totalRow <-"Total"
@@ -79,7 +79,10 @@ if (is.null(path) | path=="")  stop("No path to data") else {
     medData<-instData
   }else{ ext <-getFileExtension (path)
   if (ext=="csv") medData <- read.table(path, sep=";", dec=",",  header=T, na.strings=c("","NA"), encoding = "latin1")
-  if (ext=="xlsx") medData <- read.xlsx(path, sheet=1,skipEmptyRows = TRUE)
+  if (ext=="xlsx") {
+    medData <- read.xlsx(path, sheet=1,skipEmptyRows = TRUE) 
+    medData$Entlassungsdatum <- as.Date(medData$Entlassungsdatum, origin="2022-10-24")
+  }
   }
   if (is.null (medData)) stop("No data available")
 }
@@ -154,6 +157,30 @@ if (!is.empty(medData$Institut_ID)){
     mItem <-out$mItem
     dqRep$rdCase_rel_py_ipat <- dqRep$rdCase_rel_py_ipat *1000
     dqRep$tracerCase_rel_py_ipat <- dqRep$tracerCase_rel_py_ipat *1000
+    oc <- (env$tdata$orphaCase_no_py/env$tdata$case_no_py_ipat) * 100
+    dqRep$orphaCase_rel_py_ipat <- round (oc,2) *1000
+    caseItem <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
+    getCaseCompletenessRate<-function (cdata,ddata, caseItem){
+      mv =0
+      for (item in caseItem) {
+        index = which(cdata$basicItem==item)[1]
+        if (!is.null(index) & !is.na(index) ) {
+          if (cdata$N_Item[index]==0)   mv <-mv +100
+          else mv <-mv+cdata$missing_value_rate[index]
+        }
+        else{
+          index = which(ddata$basicItem==item)[1]
+          if (!is.null(index) & !is.na(index)){
+            if (ddata$N_Item[index]==0)   mv <-mv +100
+            else mv <-mv+ddata$missing_value_rate[index]
+          }
+        } 
+
+      }
+      mvt <-(100-(mv/length(caseItem)))
+      mvt
+    }
+    dqRep$caseCompletenessRate<- round(getCaseCompletenessRate(env$cdata, env$ddata, caseItem),2)
   }
   
   ################################################### DQ Reports ########################################################
@@ -172,6 +199,7 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Unambiguous rdCases:", dqRep$unambiguous_rdCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
                 "\n Value completeness rate:", dqRep$value_completeness_rate,
+                "\n Case completeness rate:",  dqRep$caseCompletenessRate,
                 "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
                 "\n OrphaCoding plausibility rate:", dqRep$orphaCoding_plausibility_rate,
                 "\n RdCase unambiguity rate:", dqRep$rdCase_unambiguity_rate,
