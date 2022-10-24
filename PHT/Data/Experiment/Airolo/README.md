@@ -22,4 +22,3 @@ Before starting `transactionUploader.py` you need to install this library: [fhir
 ```bash
    pip install fhirpy
 ```
-
