@@ -14,7 +14,7 @@ The arguments `IP` and `portNo` define the address and port number of target FHI
 
 For example, you can run `transactionUploader.py` as follows:
 ```bash
-   python3 transactionUploader.py 127.0.0.1 8085 Bapu
+   python3 transactionUploader.py 127.0.0.1 8085 BapuData
 ```
 
 ### NOTE
