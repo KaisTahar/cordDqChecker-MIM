@@ -32,12 +32,9 @@ max_FHIRbundles <- Inf # Inf
 # CSV and XLSX file formats are supported
 #path="./Data/medData/dqTestData.csv"
 #path="./Data/medData/dqTestData.xlsx"
-
 # Export file name
 exportFile = "DQ-Report_fhirTestData"
 #exportFile = "DQ-Report_dqTestData"
-# report year
-reportYear <-2020
 # inpatient case number
 Sys.setenv(INPATIENT_CASE_NO=997)#Airolo
 inpatientCases <- as.numeric(Sys.getenv("INPATIENT_CASE_NO"))
@@ -56,7 +53,11 @@ oItem = c("Orpha_Kode")
 tdata <- data.frame(
   pt_no =NA, case_no =NA
 )
+# report year
+reportYear <-2020
 repCol=c( "PatientIdentifikator", "Aufnahmenummer", "ICD_Primaerkode","Orpha_Kode")
+caseItems <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
+concRef <- list (min=593, max=1851)
 
 #------------------------------------------------------------------------------------------------------
 # Import ref. Data
@@ -153,12 +154,9 @@ if (!is.empty(medData$Institut_ID)){
     )
     dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, concInd, dqKeyNo)
     # DQ report
-    caseItems <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
-    concRef <- list (min=593, max=1851)
     out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems, concRef)
     dqRep <-out$metric
     mItem <-out$mItem
-    
   }
   
   ################################################### DQ Reports ########################################################
@@ -185,7 +183,6 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Orpha Cases rel. frequency:", dqRep$orphaCase_rel_py_ipat,
                 "\n Concordance with reference values:", dqRep$conc_with_refValues
                 )
-  
   if (dqRep$missing_item_no_py >0)   msg <- paste (msg, "\n", toString(mItem))
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")
