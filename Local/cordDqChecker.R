@@ -183,6 +183,7 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Orpha Cases rel. frequency:", dqRep$orphaCase_rel_py_ipat,
                 "\n Concordance with reference values:", dqRep$conc_with_refValues
                 )
+  
   if (dqRep$missing_item_no_py >0)   msg <- paste (msg, "\n", toString(mItem))
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")

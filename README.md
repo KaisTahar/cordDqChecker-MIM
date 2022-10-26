@@ -9,7 +9,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | completeness  | item completeness rate, value completeness rate, case completeness rate, orphaCoding completeness rate  | 
   | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
   | uniqueness |RD case unambiguity rate, RD case dissimilarity rate |
-  | concordance |concordance of tracer cases| 
+  | concordance |concordance with reference values| 
   
   |Parameter Name | Description |
   |-------------------------- | ------------|
@@ -25,9 +25,9 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | RD cases | number of RD cases per year |
   | tracer cases |  number of tracer RD cases per year |
   | Orpha cases |  number of Orpha cases per year |
-  | RD cases rel. frequency| relative frequency of inpatient RD cases per year |
-  | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year |
-  | Orpha cases rel. frequency| relative frequency of inpatient Orpha cases per year |
+  | RD cases rel. frequency| relative frequency of inpatient RD cases per year per 100.000 cases|
+  | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year per 100.000 cases|
+  | Orpha cases rel. frequency| relative frequency of inpatient Orpha cases per year per 100.000 cases|
   
 - The data quality framework [`dqLib`](https://github.com/medizininformatik-initiative/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
