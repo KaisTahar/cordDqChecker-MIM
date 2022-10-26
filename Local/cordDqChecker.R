@@ -14,7 +14,7 @@ options(warn=-1)# to suppress warnings
 cat("####################################***CordDqChecker***########################################### \n \n")
 # check missing packages
 pack <- unique(as.data.frame( (installed.packages())[,c(1,3)]))
-dep <- c("dqLib", "fhircrackr", "writexl", "stringi")
+dep <- c("dqLib", "fhircrackr", "openxlsx", "stringi")
 depPkg <-subset(pack, pack$Package %in% dep)
 diff <-setdiff(dep, depPkg$Package)
 if (!is.empty(diff)) paste ("The following packages are missing:", toString (diff)) else{ 
@@ -112,8 +112,9 @@ if (!is.empty(medData$Institut_ID)){
     # select DQ indicators for completeness dimension
     compInd= c(
       "item_completeness_rate", 
-      "value_completeness_rate", 
-      "orphaCoding_completeness_rate"
+       "value_completeness_rate", 
+       "case_completeness_rate",
+       "orphaCoding_completeness_rate"
     )
     # select DQ indicators for plausibility dimension
     plausInd= c( 
@@ -127,7 +128,9 @@ if (!is.empty(medData$Institut_ID)){
     )
     # select DQ indicators for concordance
     concInd= c(
+      "conc_with_refValues",
       "rdCase_rel_py_ipat",
+      "orphaCase_rel_py_ipat",
       "tracerCase_rel_py_ipat"
     )
     
@@ -135,7 +138,6 @@ if (!is.empty(medData$Institut_ID)){
     # select  key numbers for DQ report
     dqKeyNo= c(
       "case_no_py_ipat",
-      "case_no_py", 
       "patient_no_py", 
       "orphaCoding_no_py",
       "rdCase_no_py",
@@ -152,35 +154,12 @@ if (!is.empty(medData$Institut_ID)){
     )
     dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, concInd, dqKeyNo)
     # DQ report
-    out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem)
+    caseItems <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
+    concRef <- list (min=593, max=1851)
+    out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems, concRef)
     dqRep <-out$metric
     mItem <-out$mItem
-    dqRep$rdCase_rel_py_ipat <- dqRep$rdCase_rel_py_ipat *1000
-    dqRep$tracerCase_rel_py_ipat <- dqRep$tracerCase_rel_py_ipat *1000
-    oc <- (env$tdata$orphaCase_no_py/env$tdata$case_no_py_ipat) * 100
-    dqRep$orphaCase_rel_py_ipat <- round (oc,2) *1000
-    caseItem <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
-    getCaseCompletenessRate<-function (cdata,ddata, caseItem){
-      mv =0
-      for (item in caseItem) {
-        index = which(cdata$basicItem==item)[1]
-        if (!is.null(index) & !is.na(index) ) {
-          if (cdata$N_Item[index]==0)   mv <-mv +100
-          else mv <-mv+cdata$missing_value_rate[index]
-        }
-        else{
-          index = which(ddata$basicItem==item)[1]
-          if (!is.null(index) & !is.na(index)){
-            if (ddata$N_Item[index]==0)   mv <-mv +100
-            else mv <-mv+ddata$missing_value_rate[index]
-          }
-        } 
-
-      }
-      mvt <-(100-(mv/length(caseItem)))
-      mvt
-    }
-    dqRep$caseCompletenessRate<- round(getCaseCompletenessRate(env$cdata, env$ddata, caseItem),2)
+    
   }
   
   ################################################### DQ Reports ########################################################
@@ -191,22 +170,25 @@ if (!is.empty(medData$Institut_ID)){
   msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
                 "\n Report year:", dqRep$report_year,
                 "\n Inpatient case:", dqRep$case_no_py_ipat,
-                "\n Case number:", dqRep$case_no_py,
                 "\n Patient number:", dqRep$patient_no_py,
                 "\n Coded rdCases:", dqRep$rdCase_no_py,
                 "\n Orpha number:", dqRep$orphaCoding_no_py,
-                "\n OrphaCoded rdCases:", dqRep$orphaCase_no_py,
-                "\n Unambiguous rdCases:", dqRep$unambiguous_rdCase_no_py,
+                "\n Orpha Cases:", dqRep$orphaCase_no_py,
+                "\n Tracer Cases:", dqRep$tracerCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
                 "\n Value completeness rate:", dqRep$value_completeness_rate,
-                "\n Case completeness rate:",  dqRep$caseCompletenessRate,
+                "\n Case completeness rate:",  dqRep$case_completeness_rate,
                 "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
                 "\n OrphaCoding plausibility rate:", dqRep$orphaCoding_plausibility_rate,
                 "\n RdCase unambiguity rate:", dqRep$rdCase_unambiguity_rate,
                 "\n RdCase dissimilarity rate:", dqRep$rdCase_dissimilarity_rate,
-                "\n RdCase relative frequency:", dqRep$rdCase_rel_py_ipat)
+                "\n RdCase rel. frequency:", dqRep$rdCase_rel_py_ipat,
+                "\n Tacer Cases rel. frequency:", dqRep$tracerCase_rel_py_ipat,
+                "\n Orpha Cases rel. frequency:", dqRep$orphaCase_rel_py_ipat,
+                "\n Concordance with reference values:", dqRep$conc_with_refValues
+                )
   
-  if (dqRep$missing_item_no_py >0)   msg <- paste (msg, "\n Following items are missing:", toString(mItem))
+  if (dqRep$missing_item_no_py >0)   msg <- paste (msg, "\n", toString(mItem))
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")
   msg <- paste (msg, "\n \n For more infos about data quality indicators see the generated report \n >>> in the file path:", path)
