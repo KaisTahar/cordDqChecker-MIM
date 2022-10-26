@@ -7,13 +7,12 @@ rm(list = ls())
 setwd("./")
 library(dqLib)
 library(openxlsx)
-#library(writexl)
 #library(stringi)
 options(warn=-1)# to suppress warnings
 cat("####################################***CordDqChecker***########################################### \n \n")
 # check missing packages
 pack <- unique(as.data.frame( (installed.packages())[,c(1,3)]))
-dep <- c("dqLib", "fhircrackr", "writexl", "stringi")
+dep <- c("dqLib", "fhircrackr", "openxlsx", "stringi")
 depPkg <-subset(pack, pack$Package %in% dep)
 diff <-setdiff(dep, depPkg$Package)
 if (!is.empty(diff)) paste ("The following packages are missing:", toString (diff)) else{ 
@@ -29,7 +28,7 @@ exportFile = "DQ-Results_PHT"
 # report year
 reportYear <-2020
 # inpatient case number
-#Sys.setenv(INPATIENT_CASE_NO=10000)
+#Sys.setenv(INPATIENT_CASE_NO=997)
 # path to fhir server
 #Sys.setenv(FHIR_SERVER="http://141.5.101.1:8080/fhir/")
 path <- Sys.getenv("FHIR_SERVER")
@@ -104,6 +103,7 @@ if (!is.empty(medData$Institut_ID)){
     compInd= c(
       "item_completeness_rate", 
       "value_completeness_rate", 
+      "case_completeness_rate",
       "orphaCoding_completeness_rate"
     )
     # select DQ indicators for plausibility dimension
@@ -118,7 +118,9 @@ if (!is.empty(medData$Institut_ID)){
     )
     # select DQ indicators for concordance
     concInd= c(
+      "conc_with_refValues",
       "rdCase_rel_py_ipat",
+      "orphaCase_rel_py_ipat",
       "tracerCase_rel_py_ipat"
     )
     
@@ -126,12 +128,10 @@ if (!is.empty(medData$Institut_ID)){
     # select  key numbers for DQ report
     dqKeyNo= c(
       "case_no_py_ipat",
-      "case_no_py", 
       "patient_no_py", 
       "orphaCoding_no_py",
       "rdCase_no_py",
       "orphaCase_no_py",
-      "unambiguous_rdCase_no_py", 
       "tracerCase_no_py",
       "missing_item_no_py",
       "missing_value_no_py",
@@ -143,64 +143,44 @@ if (!is.empty(medData$Institut_ID)){
     )
     dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, concInd, dqKeyNo)
     # DQ report
-    out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem)
+    caseItems <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
+    concRef <- list (min=593, max=1851)
+    out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems, concRef)
     dqRep <-out$metric
     mItem <-out$mItem
-    dqRep$rdCase_rel_py_ipat <- dqRep$rdCase_rel_py_ipat *1000
-    dqRep$tracerCase_rel_py_ipat <- dqRep$tracerCase_rel_py_ipat *1000
   }
   
   ################################################### DQ Reports ########################################################
-  #path<- paste ("./Data/Export/", exportFile, "_", dqRep$report_year,  sep = "")
-  #getReport( repCol, "dq_msg", dqRep, path)
-  #path <- paste(path,".xlsx",sep = "")
-  
   path<- paste ("./Data/Export/", exportFile, "_", dqRep$report_year, ".csv",  sep = "")
-  dqRep$rdCase_con <- NA
-  dqRep$tracerCase_con<- NA
-  
   if (file.exists (path)){
     cat("previous file exists.")
     prev_df <- read.csv(path)
-    dqRepMerg<- rbind(prev_df, dqRep)
-    index <-nrow(dqRepMerg) 
-    x <- dqRepMerg$rdCase_rel_py_ipat
-    y <- dqRepMerg$tracerCase_rel_py_ipat
-    if (index >=3)
-    { 
-      while  (index >0) {
-        dqRepMerg$rdCase_con[index]<-getConcIndicator(dqRepMerg$rdCase_rel_py_ipat, index)
-        dqRepMerg$tracerCase_con[index]<- getConcIndicator(dqRepMerg$tracerCase_rel_py_ipat, index)
-        index =index -1
-      }
-      
-    }
-    
+    dqRep<- rbind(dqRep, prev_df)
   } else {
     cat("previous file not exists.")
-    dqRepMerg <-dqRep
   }
-  write.csv(dqRepMerg, path, row.names = FALSE)
-  
+  write.csv(dqRep, path, row.names = FALSE)
   top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
   msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
                 "\n Report year:", dqRep$report_year,
                 "\n Inpatient case:", dqRep$case_no_py_ipat,
-                "\n Case number:", dqRep$case_no_py,
                 "\n Patient number:", dqRep$patient_no_py,
-                "\n Orpha number:", dqRep$orphaCoding_no_py,
                 "\n Coded rdCases:", dqRep$rdCase_no_py,
-                "\n OrphaCoded rdCases:", dqRep$orphaCase_no_py,
-                "\n Unambiguous rdCases:", dqRep$unambiguous_rdCase_no_py,
+                "\n Orpha Cases:", dqRep$orphaCase_no_py,
+                "\n Tracer Cases:", dqRep$tracerCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
                 "\n Value completeness rate:", dqRep$value_completeness_rate,
+                "\n Case completeness rate:",  dqRep$case_completeness_rate,
                 "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
                 "\n OrphaCoding plausibility rate:", dqRep$orphaCoding_plausibility_rate,
                 "\n RdCase unambiguity rate:", dqRep$rdCase_unambiguity_rate,
                 "\n RdCase dissimilarity rate:", dqRep$rdCase_dissimilarity_rate,
-                "\n RdCase relative frequency:", dqRep$rdCase_rel_py_ipat)
-  
-  if (dqRep$missing_item_no_py>0)   msg <- paste (msg, "\n Following items are missing:", toString(mItem))
+                "\n RdCase relative frequency:", dqRep$rdCase_rel_py_ipat,
+                "\n Tacer Cases rel. frequency:", dqRep$tracerCase_rel_py_ipat,
+                "\n Orpha Cases rel. frequency:", dqRep$orphaCase_rel_py_ipat,
+                "\n Concordance with reference values:", dqRep$conc_with_refValues
+                )
+  if (dqRep$missing_item_no_py>0)   msg <- paste (msg, "\n" , toString(mItem))
   msg <- paste(msg, 
                "\n \n ########################################## Export ################################################")
   msg <- paste (msg, "\n \n For more infos about data quality indicators see the generated report \n >>> in the file path:", path)
