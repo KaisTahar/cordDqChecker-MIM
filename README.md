@@ -1,33 +1,34 @@
 # cordDqChecker
-`CordDqChecker` is a Tool for local and distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
+`CordDqChecker` provides a set of Tools for local and distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
 - The following data quality indicators and parameters are configured by default data quality reports:
   | Dimension  | Indicator Name | 
   | ------------- | ------------- |
-  | completeness  | item completeness rate, value completeness rate, case completeness rate, orphaCoding completeness rate  | 
+  | completeness  | item completeness rate, value completeness rate, subject completeness rate, case completeness rate, orphaCoding completeness rate  | 
   | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
-  | uniqueness |RD case unambiguity rate, RD case dissimilarity rate |
+  | uniqueness | RD case unambiguity rate, RD case dissimilarity rate |
   | concordance |concordance with reference values| 
   
   |Parameter Name | Description |
   |-------------------------- | ------------|
-  | inpatients |  number of inpatient per year |
   | inpatient cases |  number of inpatient cases per year |
+  | inpatients |  number of inpatient per year |
+  | RD cases | number of RD cases per year |
+  | Orpha cases |  number of Orpha cases per year |
+  | tracer cases |  number of tracer RD cases per year |
+  | RD cases rel. frequency| relative frequency of inpatient RD cases per year per 100.000 cases|
+  | Orpha cases rel. frequency| relative frequency of inpatient Orpha cases per year per 100.000 cases|
+  | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year per 100.000 cases|
   | missing mandatory data items |  number of missing data items per year |
-  | missing data values| number of missing data values per year |
-  | outliers | number of detected outliers per year |
+  | missing mandatory data values| number of missing data values per year |
+  | incomplete subjects |  number of incomplete inpatient records per year |
   | missing orphacodes |  number of missing Orphacodes per year |
+  | outliers | number of detected outliers per year |
   | implausible links | number of implausible code links per year |
   | ambiguous RD cases | number of ambiguous RD cases per year |
   | duplicated RD cases |  number of duplicated RD cases per year |
-  | RD cases | number of RD cases per year |
-  | tracer cases |  number of tracer RD cases per year |
-  | Orpha cases |  number of Orpha cases per year |
-  | RD cases rel. frequency| relative frequency of inpatient RD cases per year per 100.000 cases|
-  | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year per 100.000 cases|
-  | Orpha cases rel. frequency| relative frequency of inpatient Orpha cases per year per 100.000 cases|
   
 - The data quality framework [`dqLib`](https://github.com/medizininformatik-initiative/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
