@@ -130,7 +130,6 @@ if (!is.empty(medData$Institut_ID)){
     dqKeyNo= c(
       "case_no_py_ipat",
       "patient_no_py", 
-      "orphaCoding_no_py",
       "rdCase_no_py",
       "orphaCase_no_py",
       "tracerCase_no_py",
