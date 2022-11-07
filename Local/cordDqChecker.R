@@ -113,10 +113,10 @@ if (!is.empty(medData$Institut_ID)){
     # select DQ indicators for completeness dimension
     compInd= c(
       "item_completeness_rate", 
-       "value_completeness_rate", 
-      "subj_completeness_rate",
-       "case_completeness_rate",
-       "orphaCoding_completeness_rate"
+      "value_completeness_rate", 
+      "subject_completeness_rate",
+      "case_completeness_rate",
+      "orphaCoding_completeness_rate"
     )
     # select DQ indicators for plausibility dimension
     plausInd= c( 
@@ -147,7 +147,7 @@ if (!is.empty(medData$Institut_ID)){
       "tracerCase_no_py",
       "missing_item_no_py",
       "missing_value_no_py",
-      "incomplete_subj_no_py",
+      "incomplete_subject_no_py",
       "orphaMissing_no_py",
       "implausible_codeLink_no_py",
       "outlier_no_py",
@@ -175,7 +175,7 @@ if (!is.empty(medData$Institut_ID)){
                 "\n Tracer Cases:", dqRep$tracerCase_no_py,
                 "\n Item completeness rate:", dqRep$item_completeness_rate,
                 "\n Value completeness rate:", dqRep$value_completeness_rate,
-                "\n Subject completeness rate:",  dqRep$subj_completeness_rate ,
+                "\n Subject completeness rate:",  dqRep$subject_completeness_rate,
                 "\n Case completeness rate:",  dqRep$case_completeness_rate,
                 "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
                 "\n OrphaCoding plausibility rate:", dqRep$orphaCoding_plausibility_rate,
