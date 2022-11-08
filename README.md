@@ -1,5 +1,5 @@
 # cordDqChecker
-`CordDqChecker` provides a set of Tools for local and distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
+`CordDqChecker` provides a set of tools for local and distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
@@ -30,7 +30,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | ambiguous RD cases | number of ambiguous RD cases per year |
   | duplicated RD cases |  number of duplicated RD cases per year |
   
-- The data quality framework [`dqLib`](https://github.com/medizininformatik-initiative/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
+- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
   - The standard Alpha-ID-SE terminology [1]
   - A reference for tracer diagnoses such as the list provided in [2].
