@@ -1,4 +1,0 @@
-inst_id,report_year,item_completeness_rate,value_completeness_rate,subject_completeness_rate,case_completeness_rate,orphaCoding_completeness_rate,range_plausibility_rate,orphaCoding_plausibility_rate,rdCase_unambiguity_rate,rdCase_dissimilarity_rate,conc_with_refValues,rdCase_rel_py_ipat,orphaCase_rel_py_ipat,tracerCase_rel_py_ipat,case_no_py_ipat,patient_no_py,rdCase_no_py,orphaCase_no_py,tracerCase_no_py,missing_item_no_py,missing_value_no_py,incomplete_subject_no_py,orphaMissing_no_py,implausible_codeLink_no_py,outlier_no_py,ambigous_rdCase_no_py,duplicateRdCase_no_py
-260123453-Cynthia,2020,71.43,99.92,99.89,66.62,63.64,99.92,92.19,91.67,99.25,1,13200,12800,1100,1000,949,132,128,11,4,8,1,4,10,3,11,1
-260123452-Bapu,2020,85.71,85.45,13.42,58.4,60,99.94,81.25,82.35,94.44,0,1700,1600,400,1000,946,17,16,4,2,1748,819,2,3,2,3,1
-260123451-Airolo,2020,78.57,96.22,75.05,62.14,45,99.83,76.34,75,97.09,0,10030,9027,1906,997,950,100,90,19,3,518,237,11,22,8,25,3
