@@ -1,5 +1,6 @@
 # cordDqChecker
-`CordDqChecker` provides a set of tools for local and distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
+`CordDqChecker` provides a set of Data Quality (DQ) tools and metrics for the special issue "Quality of Data in Health Research and
+859 Health Care” in the “Methods of Information in Medicine" (MIM). Theses tools were used to conduct local as well as distributed data quality assessments and reporting in [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD).
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
