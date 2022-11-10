@@ -1,7 +1,7 @@
 # Dockerfile for local execution
 FROM rocker/r-ver:latest
 LABEL Maintainer="kais.tahar@med.uni-goettingen.de" 
-LABEL Description="CORD Data Quality Checker"
+LABEL Description="CORD data quality checker"
 WORKDIR /usr/local/src/myScripts
 
 # install packages
@@ -9,7 +9,7 @@ RUN apt-get update -qq && apt-get install -y libxml2-dev libcurl4-openssl-dev li
 RUN R -e "install.packages('devtools')"
 RUN R -e "install.packages('fhircrackr')"
 RUN R -e "install.packages('openxlsx')"
-Run R -e "devtools::install_github('https://github.com/medizininformatik-initiative/dqLib')"
+Run R -e "devtools::install_github('https://github.com/KaisTahar/dqLib')"
 
 # copy files
 COPY . .
