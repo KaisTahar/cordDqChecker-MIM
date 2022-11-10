@@ -42,12 +42,12 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
 We applied our methodology for distributed DQ assessments on synthetic data stored in multiple FHIR servers. The developed DQ-Tools were successfully tested and validated using [Personal Health Train (PHT)](https://websites.fraunhofer.de/PersonalHealthTrain/). The aggregated DQ results are stored in `./PHT/Data/Export`. To create a  PHT image run the command ` sudo docker build -t dq-train .` from the main folder. The FHIR data sets and tools used for data curation are stored in the branch [`methods_dataCuration`](https://github.com/KaisTahar/cordDqChecker-MIM/tree/methods_dataCuration). 
 
 ### Cross-site Reports
-- Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on data quality generated using synthetic data.
+- Here are [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/master/PHT/Data/Export) of cross-site reports on DQ generated using synthetic data.
 - The used references are store in the folder ``` "./PHT/Data/refData" ```
 
 ## Local DQ Assessment
 ### Local Execution
-To assess your data set locally go to folder `./Local` and run `cordDqChecker.R` to generate data quality reports.
+To assess your data set locally go to folder `./Local` and run `cordDqChecker.R` to generate DQ reports.
 
 - The script `cordDqChecker.R` reads data from FHIR server or from supported file formats such as CSV and Excel. The path variable specifies which data set should be imported.
 For Example you can define your path as following:
@@ -67,7 +67,7 @@ Once the source data path and local variables are defined, start the script to c
 The generated reports are saved in ``` "./Local/Data/Export" ```
 
 ### Local Reports
-- In the folder  ``` "./Local/Data/Export" ``` you will find some examples of data quality reports generated locally using synthetic data.
+- In the folder  ``` "./Local/Data/Export" ``` you will find some examples of DQ reports generated locally using synthetic data.
 - The used references are stored in ``` "./Local/Data/refData" ```
 
 ## Note
