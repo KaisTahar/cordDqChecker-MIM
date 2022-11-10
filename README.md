@@ -3,15 +3,16 @@
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: 01ZZ1911R, FKZ-01ZZ1911R.
 ## Data Quality Metrics
-- The following data quality indicators and parameters are configured by default data quality reports:
-  | Dimension  | Indicator Name | 
+- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on DQ related issues and metrics.
+- The following DQ indicators and parameters are configured by default reports:
+  | Dimension  | DQ Indicator | 
   | ------------- | ------------- |
   | completeness  | item completeness rate, value completeness rate, subject completeness rate, case completeness rate, orphaCoding completeness rate  | 
   | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
   | uniqueness | RD case unambiguity rate, RD case dissimilarity rate |
   | concordance |concordance with reference values| 
   
-  |Parameter Name | Description |
+  |DQ Parameter | Description |
   |-------------------------- | ------------|
   | inpatient cases |  number of inpatient cases per year |
   | inpatients |  number of inpatient per year |
@@ -30,10 +31,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
   | ambiguous RD cases | number of ambiguous RD cases per year |
   | duplicated RD cases |  number of duplicated RD cases per year |
   
-- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on data quality related issues and metrics.
-- The following references are required to assess the quality of orphacoding and can be easily updated with new versions:
-  - The standard Alpha-ID-SE terminology [1]
-  - A reference for tracer diagnoses such as the list provided in [2].
+- The following references are required to assess the quality of orphacoding and can be easily updated with new versions: (1) The standard Alpha-ID-SE terminology [1], and (2) a reference for tracer diagnoses such as the list provided in [2].
   
 	[1]   BfArM - Alpha-ID-SE [Internet]. [cited 2022 May 23]. Available from: [BfArM](https://www.bfarm.de/EN/Code-systems/Terminologies/Alpha-ID-SE/_node.html) 
 	

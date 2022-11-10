@@ -4,6 +4,6 @@ authors:
 - family-names: "Tahar"
   given-names: "Kais"
   orcid: "https://orcid.org/0000-0001-9683-0575"
-title: "cordDqChecker"
-date-published: 2021-08-13
-url: "https://github.com/medizininformatik-initiative/cord-dq-checker"
+title: "cordDqChecker-MIM"
+date-published: 2022-07-18
+url: "https://github.com/KaisTahar/cordDqChecker-MIM"
