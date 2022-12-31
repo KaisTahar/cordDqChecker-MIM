@@ -1,5 +1,6 @@
 # cordDqChecker-MIE2023
-This repository provides all instructions and code for conducting the study presented in the paper submitted for the 33st Medical Informatics Europe Conference (MIE2023). `CordDqChecker` is a tool for data quality (DQ) assessment and reporting on Rare Diseases (RD) data.`CordDqChecker-MIE2023` provides the version presented in the conference paper.
+`cordDqChecker-MIE2023` Data Quality Assessment on Rare Diseases (RD) Data – A set of Metrics and Tools for the 33st Medical Informatics Europe (MIE) Conference 2023.
+This repository provides the code version and all instructions for conducting the study presented in the paper submitted for the MIE Conference 2023 (MIE2023). 
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: FKZ-01ZZ1911R.
 
@@ -38,7 +39,7 @@ Here are some [examples](https://github.com/KaisTahar/cordDqChecker/tree/mie_202
   | completeness  | item completeness rate, value completeness rate, orphaCoding completeness rate  | 
   | plausibility  | orphaCoding plausibility rate, range plausibility rate | 
   | uniqueness | RD case unambiguity rate, RD case dissimilarity rate |
-  | concordance |concordance with reference values| 
+
   
   |DQ Parameter | Description |
   |-------------------------- | ------------|
@@ -47,13 +48,7 @@ Here are some [examples](https://github.com/KaisTahar/cordDqChecker/tree/mie_202
   | RD cases rel. frequency| relative frequency of inpatient RD cases per year per 100.000 cases|
   | Orpha cases rel. frequency| relative frequency of inpatient Orpha cases per year per 100.000 cases|
   | tracer cases rel. frequency| relative frequency of inpatient tracer RD cases per year per 100.000 cases|
-  | missing mandatory data items |  number of missing data items per year in a given data set |
-  | missing mandatory data values| number of missing data values per year in a given data set |
-  | missing orphacodes |  number of missing Orphacodes per year in a given data set |
-  | outliers | number of detected outliers per year in a given data set |
-  | implausible links | number of implausible code links per year in a given data set |
-  | ambiguous RD cases | number of ambiguous RD cases per year in a given data set |
-  | duplicated RD cases |  number of duplicated RD cases per year in a given data set |
+ 
   
 - The following references are required to assess the quality of orphacoding and can be easily updated with new versions: (1) The standard Alpha-ID-SE terminology [1], and (2) the reference for tracer diagnoses provided in [2].
   
