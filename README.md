@@ -6,7 +6,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
 ## 1. Local Execution
 We would like to note that the developed tool supports HL7 FHIR as well as file formats such as CSV or Excel. To conduct local DQ assessments, please follow the following instructions. 
 1. clone reposistory and checkout branch FDPG_study
-   - Run the git command: ``` git clone --branch mie_2023 https://github.com/KaisTahar/cordDqChecker-MIM ```
+   - Run the git command: ``` git clone --branch mie_2023 https://github.com/KaisTahar/cordDqChecker ```
 
 2. Go to the folder `./Local` and edit the file `config.yml` with your local variables
    - Set your custom variables (v1...v5)
@@ -21,14 +21,14 @@ We would like to note that the developed tool supports HL7 FHIR as well as file 
      - Set the total number of inpatient case for 2020 (v4) as following:
   ``` inpatientCases_number: !expr list ( "2020"=997) ```
      - Set the corresponding code for filtering inpatient cases (v5) else default = NULL
-   - Please change the variables v6 - v9 only if technical or legal restrictions otherwise prevent successful execution! In this context we would like to note that the CORD-MI list of tracer diagnoses version 1.0 (=v1) is used as a default reference for required RD diagnoses (see tracerPath v9). This [reference list of RD diagnoses](https://github.com/KaisTahar/cordDqChecker-MIM/tree/mie_2023/Local/Data/refData/CordTracerList_v1.csv) is stored in the folder for reference data `./Local/Data/refData` 
+   - Please change the variables v6 - v9 only if technical or legal restrictions otherwise prevent successful execution! In this context we would like to note that the CORD-MI list of tracer diagnoses version 1.0 (=v1) is used as a default reference for required RD diagnoses (see tracerPath v9). This [reference list of RD diagnoses](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/Data/refData/CordTracerList_v1.csv) is stored in the folder for reference data `./Local/Data/refData` 
 
 3. Once the source data path and local variables are defined, start the script using this command: ```Rscript cordDqChecker.R ``` to assess the quality of your data. You can also run this script using Rstudio or Dockerfile. To avoid local dependency issues just run the command ```sudo docker-compose up``` in the folder `./Local` to get the script running
 
 4. The script generates two files per year analyzed – the first one is a CSV file that contains the calculated DQ metrics, while the second file is an Excel file that contains a report on DQ violations. To enable users to find the DQ violations and causes of these violations, this report provides sensitive information such as Patient Identifier (ID) or case ID – it is meant for internal use only. The generated reports are saved in the folder `./Local/Data/Export`.
 
 ## 2. Examples of Local Reports
-Here are some [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/mie_2023/Local/Data/Export) of data quality reports generated locally using sythetic data.	
+Here are some [examples](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/Data/Export) of data quality reports generated locally using sythetic data.	
 
 ## 3. Data Quality Metrics
 - The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on DQ related issues and metrics.
@@ -64,15 +64,15 @@ Here are some [examples](https://github.com/KaisTahar/cordDqChecker-MIM/tree/mie
 
 ## 4. Note
 
--  You can also run `cordDqChecker` using Rstudio or Dockerfile. When using Rstudio, all required packages should be installed automatically using the script [`installPackages.R`](https://github.com/KaisTahar/cordDqChecker-MIM/tree/mie_2023/Local/R/installPackages.R). We would like to note that the `fhircrackr` package is only required to run local DQ assessments on FHIR data. To avoid local dependency issues go to folder `./Local` and just run the command `sudo docker-compose up` to get `cordDqChecker` running
+-  You can also run `cordDqChecker` using Rstudio or Dockerfile. When using Rstudio, all required packages should be installed automatically using the script [`installPackages.R`](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/R/installPackages.R). We would like to note that the `fhircrackr` package is only required to run local DQ assessments on FHIR data. To avoid local dependency issues go to folder `./Local` and just run the command `sudo docker-compose up` to get `cordDqChecker` running
 
 - The missing item rate will be calculated based on FHIR [implementation guidlines of the MII core data set](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set). Hence, mandatory items of the basic modules Person, Case and Diagnosis are required
 
 - To cite `cordDqChecker`, please use the following **BibTeX** entry: 
   ```
   @software{Tahar_cordDqChecker,
-  author = {Tahar, Kais},title = {{cordDqChecker}},
-  url = {https://github.com/KaisTahar/cordDqChecker-MIM/tree/mie_2023},
+  author = {Tahar, Kais},title = {{cordDqChecker-MIE2023}},
+  url = {https://github.com/KaisTahar/cordDqChecker/tree/mie_2023},
   year = {2022}
   }
 
