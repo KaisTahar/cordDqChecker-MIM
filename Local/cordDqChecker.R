@@ -91,20 +91,11 @@ uniqInd= c(
 dqKeyNo= c(
   "case_no_py_ipat",
   "case_no_py",
-  "rdCase_no_py",
-  "orphaCase_no_py",
-  "tracerCase_no_py",
   "rdCase_rel_py_ipat",
   "orphaCase_rel_py_ipat",
   "tracerCase_rel_py_ipat",
-  "missing_item_no_py",
-  "missing_value_no_py",
-  "orphaMissing_no_py",
-  "implausible_codeLink_no_py",
-  "outlier_no_py",
-  "ambiguous_rdCase_no_py", 
-  "duplicateRdCase_no_py"
-)
+  "missing_item_no_py"
+  )
 
 #------------------------------------------------------------------------------------------------------
 # Import CORD data
@@ -284,9 +275,6 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
                   "\n Report year:", dqRep$report_year,
                   "\n Inpatient cases:", dqRep$case_no_py_ipat,
                   "\n Analyzed cases:", dqRep$case_no_py,
-                  "\n rdCases:", dqRep$rdCase_no_py,
-                  "\n Orpha Cases:", dqRep$orphaCase_no_py,
-                  "\n Tracer Cases:", dqRep$tracerCase_no_py,
                   "\n Item completeness rate:", dqRep$item_completeness_rate,
                   "\n Value completeness rate:", dqRep$value_completeness_rate,
                   "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,
