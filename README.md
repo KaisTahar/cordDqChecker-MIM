@@ -1,5 +1,5 @@
 # cordDqChecker-MIE2023
-This repository provides all instructions and code for conducting the study presented in the paper submitted for the 33st Medical Informatics Europe Conference (MIE2023). `CordDqChecker` is a tool for data quality (DQ) assessment and reporting on Rare Diseases (RD) data.`CordDqChecker-MIE2023` is the version presented in the conference paper.
+This repository provides all instructions and code for conducting the study presented in the paper submitted for the 33st Medical Informatics Europe Conference (MIE2023). `CordDqChecker` is a tool for data quality (DQ) assessment and reporting on Rare Diseases (RD) data.`CordDqChecker-MIE2023` provides the version presented in the conference paper.
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: FKZ-01ZZ1911R.
 
