@@ -1,6 +1,7 @@
-# cordDqChecker-MIE2023
-`cordDqChecker-MIE2023` Data Quality Assessment on Rare Diseases (RD) Data – A set of Metrics and Tools for the 33st Medical Informatics Europe (MIE) Conference 2023.
-This repository provides the code version and all instructions for conducting the study presented in the paper submitted for the MIE Conference 2023 (MIE2023). 
+# <p align="center"> cordDqChecker-MIE2023 </p>
+## <p align="center"> Data Quality Assessment on Rare Diseases Data – A set of Metrics and Tools for the 33rd Medical Informatics Europe Conference 2023 </p>
+
+`cordDqChecker-MIE2023` This repository provides the code version and all instructions for conducting the study presented in the paper submitted for the 33rd Medical Informatics Europe (MIE) Conference 2023 (MIE2023). 
 
 Acknowledgement: This work was done within the “Collaboration on Rare Diseases” of the Medical Informatics Initiative (CORD-MI) funded by the German Federal Ministry of Education and Research (BMBF), under grant number: FKZ-01ZZ1911R.
 
@@ -22,7 +23,7 @@ We would like to note that the developed tool supports HL7 FHIR as well as file 
      - Set the total number of inpatient case for 2020 (v4) as following:
   ``` inpatientCases_number: !expr list ( "2020"=997) ```
      - Set the corresponding code for filtering inpatient cases (v5) else default = NULL
-   - Please change the variables v6 - v9 only if technical or legal restrictions otherwise prevent successful execution! In this context we would like to note that the CORD-MI list of tracer diagnoses version 1.0 (=v1) is used as a default reference for required RD diagnoses (see tracerPath v9). This [reference list of RD diagnoses](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/Data/refData/CordTracerList_v1.csv) is stored in the folder for reference data `./Local/Data/refData` 
+   - Please change the variables v6 - v9 only if technical or legal restrictions otherwise prevent successful execution! In this context we would like to note that the CORD-MI list of tracer diagnoses version 1.0 (=v1) is used as a default reference for required diagnoses (see tracerPath v9). This [reference list](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/Data/refData/CordTracerList_v1.csv) is stored in the folder for reference data `./Local/Data/refData` 
 
 3. Once the source data path and local variables are defined, start the script using this command: ```Rscript cordDqChecker.R ``` to assess the quality of your data. You can also run this script using Rstudio or Dockerfile. To avoid local dependency issues just run the command ```sudo docker-compose up``` in the folder `./Local` to get the script running
 
@@ -63,12 +64,12 @@ Here are some [examples](https://github.com/KaisTahar/cordDqChecker/tree/mie_202
 
 - The missing item rate will be calculated based on FHIR [implementation guidlines of the MII core data set](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set). Hence, mandatory items of the basic modules Person, Case and Diagnosis are required
 
-- To cite `cordDqChecker`, please use the following **BibTeX** entry: 
+- To cite `cordDqChecker-MIE2023`, please use the following **BibTeX** entry: 
   ```
-  @software{Tahar_cordDqChecker,
-  author = {Tahar, Kais},title = {{cordDqChecker-MIE2023}},
+  @software{Tahar_cordDqChecker-MIE2023,
+  author = {Tahar, Kais},title = {{A set of Metrics and Tools for the 33rd Medical Informatics Europe Conference 2023}},
   url = {https://github.com/KaisTahar/cordDqChecker/tree/mie_2023},
-  year = {2022}
+  year = {2023}
   }
 
   ```
