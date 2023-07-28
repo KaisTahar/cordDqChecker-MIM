@@ -405,10 +405,11 @@ checkOutlier<-function (ddata, item, cl) {
     {
       item1.vec <-  as.Date(ISOdate(env$medData[["Geburtsdatum"]], 1, 1))
       now<- as.Date(Sys.Date())
-      out<-getAgeMaxOutlier(item1.vec,  now, 105)
+      out<-getAgeMaxOutlier(item1.vec,  now, ageMax)
       if (!is.empty(out)) {
         ddata<- addOutlier (item, ddata, length(out), length(item1.vec) )
-        for(i in out) env$dq[,cl][i] <- paste( "Implausible birthdate", item1.vec[i] , "maximal age 105.",  env$dq[,cl][i])
+        maxAge <-paste( "maximal age ", ageMax, ".", sep = "")
+        for(i in out) env$dq[,cl][i] <- paste( "Implausible birthdate", item1.vec[i] , maxAge,  env$dq[,cl][i])
       }
     }
 
