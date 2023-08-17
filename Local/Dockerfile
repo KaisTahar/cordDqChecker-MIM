@@ -1,5 +1,5 @@
 # Dockerfile for local execution
-FROM rocker/r-ver:latest
+FROM rocker/r-ver:4.2.2
 LABEL Maintainer="kais.tahar@med.uni-goettingen.de" 
 LABEL Description="CORD Data Quality Checker"
 WORKDIR /usr/local/src/myScripts
