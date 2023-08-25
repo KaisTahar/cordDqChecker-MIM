@@ -890,26 +890,18 @@ getConcIndicator <- function(dist, index){
 #' @import openxlsx utils
 #' @export
 #'
-getReport <- function (repCol, cl, td, path) {
-  repCol = append (repCol, cl)
+
+getReport <- function (repMeta, cl, td, path) {
+  repCol <-repMeta$repCol
+  englCol <-repMeta$engLabel 
+  repCol = append(repCol, cl)
+  englCol = append(englCol, cl)
   repData <-subset(env$dq, select= repCol)
   dfq <-repData[ which(env$dq[,cl]!="")  ,]
-  dfq[nrow(dfq)+1,] <- NA
-  dfq[nrow(dfq)+1,1] <- env$mItem
+  names(dfq)=englCol
+  dfq[nrow(dfq)+1,5] <- env$mItem
   sheets <- list("DQ_Report"=dfq, "DQ_Metrics" = td)
-  write.xlsx(sheets, paste (path,".xlsx", sep =""))
+  header_st <- createStyle(textDecoration = "Bold")
+  write.xlsx(sheets, paste (path,".xlsx", sep =""), headerStyle = header_st, colWidths="auto")
   write.csv(td, paste (path,".csv", sep =""), row.names = FALSE)
-  # env <-NULL
-}
-
-#' @title getExtendedReport
-#' @description This function generates an extended data quality reports with infos about Projecathon use cases
-#' @import openxlsx
-#' @export
-#'
-getExtendedReport <- function ( repCol,cl, td, useCase, path) {
-  repData <-subset(env$dq,select= repCol)
-  dfq <-repData[ which(env$dq[,cl]!="")  ,]
-  sheets <- list("DQ_Report"=dfq, "DQ_Metrics"= td, "Projectathon"=useCase)
-  write.xlsx(sheets, path)
 }
