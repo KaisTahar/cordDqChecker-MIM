@@ -7,7 +7,7 @@ Acknowledgement: This work was done within the “Collaboration on Rare Diseases
 
 ## 1. Local Execution
 We would like to note that the developed tool supports HL7 FHIR as well as file formats such as CSV or Excel. To conduct local DQ assessments, please follow the following instructions. 
-1. clone reposistory and checkout branch FDPG_study
+1. clone reposistory and checkout branch mie_2023
    - Run the git command: ``` git clone --branch mie_2023 https://github.com/KaisTahar/cordDqChecker ```
 
 2. Go to the folder `./Local` and edit the file `config.yml` with your local variables
@@ -33,7 +33,7 @@ We would like to note that the developed tool supports HL7 FHIR as well as file 
 Here are some [examples](https://github.com/KaisTahar/cordDqChecker/tree/mie_2023/Local/Data/Export) of data quality reports generated locally using sythetic data.	
 
 ## 3. Data Quality Metrics
-- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on DQ related issues and metrics.
+- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on DQ related issues and metrics. The code version used for this study is availabe in the folder `./Local/R`.
 - The following DQ indicators and parameters are configured by default reports:
   | Dimension  | DQ Indicator | 
   | ------------- | ------------- |
