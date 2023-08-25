@@ -47,24 +47,31 @@ ddata <- data.frame(
   basicItem= c ( "Geburtsdatum",  "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum", "Total"),
   engLabel = c("birthdate", "admission date" , "discharge date", "diagnosis date", NA)
 )
+
 # optional items
 oItem = c("Orpha_Kode")
 tdata <- data.frame(
   pt_no =NA, case_no =NA
 )
 caseItems <- c("PatientIdentifikator","Aufnahmenummer","Kontakt_Klasse", "Fall_Status","ICD_Primaerkode", "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum","DiagnoseRolle")
-refData1 <- read.table("./Data/refData/Tracerdiagnosen_AlphaID-SE-2022.csv", sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)
-refData2 <- read.table("./Data/refData/icd10gm2022_alphaidse_edvtxt.txt", sep="|", dec= "," , quote ="", na.strings=c("","NA"), encoding = "UTF-8")
+refData1 <- read.table(tracerDiagnoses_ref, sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)
+refData2 <- read.table(alphaIdSe_ref, sep="|", dec= "," , quote ="", na.strings=c("","NA"), encoding = "UTF-8")
 headerRef1<- c ("IcdCode", "Complete_SE", "Unique_SE")
 headerRef2<- c ("Gueltigkeit", "Alpha_ID", "ICD_Primaerkode1", "ICD_Manifestation", "ICD_Zusatz","ICD_Primaerkode2", "Orpha_Kode", "Label")
 names(refData1)<-headerRef1
 names(refData2)<-headerRef2
-cordTracerList <- read.table(tracerPath, sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)$IcdCode
+cordDiagnosisList <- read.table(diagnosisPath, sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)$IcdCode
 # meta data for DQ report
 repMeta= c("inst_id", "report_year")
 bItemCl <-"basicItem"
 totalRow <-"Total"
-repCol=c( "PatientIdentifikator", "Aufnahmenummer", "ICD_Primaerkode","Orpha_Kode")
+repHeader <- data.frame(
+  repCol=c( "PatientIdentifikator", "Aufnahmenummer", "ICD_Primaerkode","Orpha_Kode"),
+  engLabel = c("Patient ID", "Admission ID" , "ICD_Primary Code", "Orphacode")
+)
+repCol <-repHeader$repCol
+
+#repCol=c( "PatientIdentifikator", "Aufnahmenummer", "ICD_Primaerkode","Orpha_Kode")
 #------------------------------------------------------------------------------------------------------
 # Setting DQ dimensions , indicators and parameters
 #------------------------------------------------------------------------------------------------------
@@ -88,13 +95,22 @@ uniqInd= c(
 
 ############ Selection of DQ parameters ########################
 # select DQ parameters for DQ report
-dqKeyNo= c(
+dqParam= c(
   "case_no_py_ipat",
   "case_no_py",
+  "missing_item_no_py",
+  "missing_value_no_py",
+  "outlier_no_py",
+  "orphaMissing_no_py",
+  "implausible_codeLink_no_py",
+  "ambiguous_rdCase_no_py", 
+  "duplicateRdCase_no_py",
+  "rdCase_no_py",
+  "orphaCase_no_py",
+  "tracerCase_no_py",
   "rdCase_rel_py_ipat",
   "orphaCase_rel_py_ipat",
-  "tracerCase_rel_py_ipat",
-  "missing_item_no_py"
+  "tracerCase_rel_py_ipat"
   )
 
 #------------------------------------------------------------------------------------------------------
@@ -115,23 +131,23 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     dataFormat =""
     dqRep <-NULL
     inpatientCases = 0
-    tracer <- cordTracerList
+    tracer <- cordDiagnosisList
     if (toString(reportYear)  %in%  names(ipatCasesList))inpatientCases = ipatCasesList[[toString(reportYear)]]
     if (grepl("fhir", path))
     {
       dataFormat = "FHIR"
       #tracer <- cordTracer
-      if (length (tracer) > tracerNo )
+      if (length (tracer) > diagnosisNo )
       {
-        while ( length(tracer) > tracerNo) {
-          cordTracer.vec <- tail(tracer, tracerNo)
+        while ( length(tracer) > diagnosisNo) {
+          cordTracer.vec <- tail(tracer, diagnosisNo)
           cordTracer <- paste0(cordTracer.vec, collapse=",")
           print(paste ("cordTracer:",    cordTracer, "NO:", length(cordTracer.vec)))
           source("./R/dqFhirInterface.R")
           medData <- base::rbind(medData, instData)
-          tracer <- head(tracer, - tracerNo)
+          tracer <- head(tracer, - diagnosisNo)
         }
-        if ( length(tracer) <= tracerNo)
+        if ( length(tracer) <= diagnosisNo)
         { 
           cordTracer.vec <- tracer
           cordTracer <- paste0(cordTracer.vec, collapse=",")
@@ -143,8 +159,8 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         
       } 
       else { 
-        if(is.null (cordTracerList)) cordTracer= NULL else cordTracer <- paste0(tracer, collapse=",")
-        print(paste ("cordTracer:",    cordTracerList, "NO:", length(tracer)))
+        if(is.null (cordDiagnosisList)) cordTracer= NULL else cordTracer <- paste0(tracer, collapse=",")
+        print(paste ("cordTracer:",    cordDiagnosisList, "NO:", length(tracer)))
         source("./R/dqFhirInterface.R")
         medData<-instData
       }
@@ -165,7 +181,7 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         
       } else stop("No data path found, please set the data path in the config file")
       # filter for tracer diagnoses
-      medData<- subset(medData, medData$ICD_Primaerkode %in% cordTracerList)
+      medData<- subset(medData, medData$ICD_Primaerkode %in% cordDiagnosisList)
       # filter for report year and inpatient cases
       if (dateRef %in% names(medData)){
         if (!all(is.na(medData[[dateRef]]))) medData<- medData[format(as.Date(medData[[dateRef]], format=dateFormat),"%Y")==reportYear, ] else stop("No date values available for data selection")
@@ -254,21 +270,25 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     for (i in 1:length (inst)) {
       instID <- as.character (inst[i]) 
       # DQ report
-      dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, dqKeyNo)
-      out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems)
+      dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, dqParam)
+      out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "DQ_Violations", "basicItem", "Total", oItem, caseItems)
       dqRep <-out$metric
       mItem <-out$mItem
-      dqRep$dataFormat <- dataFormat
+      mx <-dqRep$case_no_py- dqRep$rdCase_no_py
+      index <- which(names(dqRep)=="rdCase_no_py")
+      dqRep <- data.frame(dqRep[1:index],mxCases_no_py=mx,dqRep[(index+1):ncol(dqRep)])
       endTime <- base::Sys.time()
       timeTaken <-  round (as.numeric (endTime - startTime, units = "mins"), 2)
       dqRep$executionTime_inMin <-timeTaken
-      if (!is.null (encounterClass_value)) dqRep$encounterClass <-  encounterClass_value else dqRep$encounterClass <- NA
       dqRep$dateRef <- dateRef
+      dqRep$dataFormat <- dataFormat
+      dqRep$diagnosesList <- diagnosisListVersion
+      if (!is.null (encounterClass_value)) dqRep$encounterClass <-  encounterClass_value else dqRep$encounterClass <- NA
     }
     
     ################################################### DQ Reports ########################################################
     expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_", dqRep$report_year,  sep = "")
-    getReport( repCol, "dq_msg", dqRep, expPath)
+    getReport( repHeader, "DQ_Violations", dqRep, expPath)
     
     top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
     msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
@@ -281,6 +301,9 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
                   "\n OrphaCoding plausibility rate:", dqRep$orphaCoding_plausibility_rate,
                   "\n RdCase unambiguity rate:", dqRep$rdCase_unambiguity_rate,
                   "\n RdCase dissimilarity rate:", dqRep$rdCase_dissimilarity_rate,
+                  "\n Missing Orphacodes:",  dqRep$orphaMissing_no,
+                  "\n Implausible Diagnoses :",  dqRep$implausible_codeLink_no,
+                  "\n Duplicated RD Cases:",  dqRep$duplicateRdCase_no,
                   "\n RD Cases rel. frequency:", dqRep$rdCase_rel_py_ipat,
                   "\n Tacer Cases rel. frequency:", dqRep$tracerCase_rel_py_ipat,
                   "\n Orpha Cases rel. frequency:", dqRep$orphaCase_rel_py_ipat
@@ -304,13 +327,12 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems)
         dqRep <-out$metric
         dqRep$report_year <-  paste (reportYearStart,"-",  reportYearEnd,  sep = "")
-        dqRep$dataFormat <- dataFormat
         endTime <- base::Sys.time()
         timeTaken <-  round (as.numeric (endTime - executionTime, units = "mins"), 2)
         dqRep$executionTime_inMin <-timeTaken
+        dqRep$dataFormat <- dataFormat
         expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_allData.csv",  sep = "")
-        write.csv(dqRep, expPath, row.names = FALSE)
-        
+        write.csv(tRep, expPath, row.names = FALSE)
       }
     }
   }
