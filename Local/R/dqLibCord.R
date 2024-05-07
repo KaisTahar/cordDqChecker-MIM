@@ -901,7 +901,7 @@ getReport <- function (repMeta, cl, td, path) {
   names(dfq)=englCol
   dfq[nrow(dfq)+1,5] <- env$mItem
   #sheets <- list("DQ_Report"=dfq, "DQ_Metrics" = td)
-  sheets <- list("DQ_Metrics" = td, "DQ_Report"=dfq)
+  sheets <- list("DQ_Metrics" = td, "DQ_Violations"=dfq)
   header_st <- createStyle(textDecoration = "Bold")
   write.xlsx(sheets, paste (path,".xlsx", sep =""), headerStyle = header_st, colWidths="auto")
   write.csv(td, paste (path,".csv", sep =""), row.names = FALSE)
