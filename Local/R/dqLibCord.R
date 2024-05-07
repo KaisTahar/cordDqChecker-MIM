@@ -900,8 +900,38 @@ getReport <- function (repMeta, cl, td, path) {
   dfq <-repData[ which(env$dq[,cl]!="")  ,]
   names(dfq)=englCol
   dfq[nrow(dfq)+1,5] <- env$mItem
-  sheets <- list("DQ_Report"=dfq, "DQ_Metrics" = td)
+  #sheets <- list("DQ_Report"=dfq, "DQ_Metrics" = td)
+  sheets <- list("DQ_Metrics" = td, "DQ_Report"=dfq)
   header_st <- createStyle(textDecoration = "Bold")
   write.xlsx(sheets, paste (path,".xlsx", sep =""), headerStyle = header_st, colWidths="auto")
   write.csv(td, paste (path,".csv", sep =""), row.names = FALSE)
 }
+
+#' @title addSemantics 
+#' @description This function adds semantic enrichment to resulting DQ metrics
+#'
+addSemantics <- function (dqRep, semData) {
+  tRep <- as.data.frame(t(dqRep))
+  Abbreviation  <- rownames (tRep)
+  Label <-NA
+  tRep <- cbind (Label, tRep)
+  tRep <- cbind (Abbreviation, tRep)
+  rownames(tRep) <- NULL
+  colnames(tRep)[3] <-  "Value"
+  for (item in tRep$Abbreviation)
+  {
+    if (item  %in%  semData$SymbolicName){
+      k<- which(tRep$Abbreviation==item)
+      l<- which(semData$SymbolicName==item)
+      tRep$Label[k]=semData$Label[l]
+      abr<-semData$Abbreviation[l]
+      tRep$Abbreviation[k]=abr
+      if ( grepl( "dqi", abr, fixed=TRUE))
+      {
+        tRep$Value[k]<-paste0(gsub("\\.", ",", tRep$Value[k]), '%')
+      }
+    }
+  }
+  tRep
+}
+

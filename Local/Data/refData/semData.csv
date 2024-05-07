@@ -1,0 +1,31 @@
+Label,Abbreviation,SymbolicName
+Organization Name or Identifier ,org_id,inst_id
+Report Year,rep_year,report_year
+Item Completeness Rate,dqi_co_icr,item_completeness_rate
+Value Completeness Rate,dqi_co_vcr,value_completeness_rate
+Orphacoding Completeness Rate,dqi_co_ocr,orphaCoding_completeness_rate
+Range Plausibility Rate,dqi_pl_rpr,range_plausibility_rate
+Orphacoding Plausibility Rate,dqi_pl_opr,orphaCoding_plausibility_rate
+RD Case unambiguity Rate,dqi_un_cur,rdCase_unambiguity_rate
+RD Case Dissimilarity Rate,dqi_un_cdr,rdCase_dissimilarity_rate
+Analyzed Patients,aPatient,patient_no_py
+Analyzed Cases,aCase,case_no_py
+Missing Items,im_misg,missing_item_no_py
+Missing Values,vm_misg,missing_value_no_py
+Outliers,vo,outlier_no_py
+Missing Orphacodes,oc_misg,orphaMissing_no_py
+Implausible Links,link_ip,implausible_codeLink_no_py
+Ambiguous RD Cases,rdCase_amb,ambiguous_rdCase_no_py
+Duplicated RD Cases,rdCase_dup,duplicateRdCase_no_py
+RD Cases,rdCase,rdCase_no_py
+Mixed Cases,mxCase,mxCases_no_py
+Orpha Cases,orphaCase,orphaCase_no_py
+Tracer Cases,tracerCase,tracerCase_no_py
+RD Case rel. Frequency,rdCase_rel,rdCase_rel_py_ipat
+Orpha Case rel. Frequency,orphaCase_rel,orphaCase_rel_py_ipat
+Tracer Case rel. Frequency,tracerCase_rel,tracerCase_rel_py_ipat
+Execution Time,exe_time,executionTime_inMin
+Date Reference,date_ref,dateRef
+Data Format,dataFormat,dataFormat
+Encounter Class,enctrClass,encounterClass
+Version of Used Diagnosis List,dxList,diagnosesList

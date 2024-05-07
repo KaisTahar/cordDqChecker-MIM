@@ -41,12 +41,15 @@ exportFile = "DQ-Report"
 #------------------------------------------------------------------------------------------------------
 # defining mandatory and optional items
 cdata <- data.frame(
-  basicItem= c("PatientIdentifikator","Aufnahmenummer", "Institut_ID",  "Geschlecht","PLZ", "Land","Kontakt_Klasse", "Fall_Status", "DiagnoseRolle", "ICD_Primaerkode","Orpha_Kode", "Total")
+  basicItem= c("PatientIdentifikator","Aufnahmenummer", "Institut_ID",  "Geschlecht","PLZ", "Land","Kontakt_Klasse", "Fall_Status", "DiagnoseRolle", "ICD_Primaerkode", "Total")
 )
 ddata <- data.frame(
   basicItem= c ( "Geburtsdatum",  "Aufnahmedatum", "Entlassungsdatum", "Diagnosedatum", "Total"),
   engLabel = c("birthdate", "admission date" , "discharge date", "diagnosis date", NA)
 )
+
+# semantic mapping of labels and symbolic names (also called code variables)
+semData <- read.table("./Data/refData/semData.csv", sep=",",  dec=",", na.strings=c("","NA"), encoding = "UTF-8",header=TRUE)
 
 # optional items
 oItem = c("Orpha_Kode")
@@ -96,7 +99,7 @@ uniqInd= c(
 ############ Selection of DQ parameters ########################
 # select DQ parameters for DQ report
 dqParam= c(
-  "case_no_py_ipat",
+  "patient_no_py",
   "case_no_py",
   "missing_item_no_py",
   "missing_value_no_py",
@@ -288,7 +291,9 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     
     ################################################### DQ Reports ########################################################
     expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_", dqRep$report_year,  sep = "")
-    getReport( repHeader, "DQ_Violations", dqRep, expPath)
+    rep <-addSemantics (dqRep, semData)
+    #getReport( repHeader, "DQ_Violations", dqRep, expPath)
+    getReport( repHeader, "DQ_Violations", rep, expPath)
     
     top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
     msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
