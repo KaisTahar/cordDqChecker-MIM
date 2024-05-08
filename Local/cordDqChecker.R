@@ -99,8 +99,8 @@ uniqInd= c(
 ############ Selection of DQ parameters ########################
 # select DQ parameters for DQ report
 dqParam= c(
-  "patient_no_py",
   "case_no_py",
+  "patient_no_py",
   "missing_item_no_py",
   "missing_value_no_py",
   "outlier_no_py",
@@ -298,8 +298,8 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
     msg <- paste ("\n Data quality analysis for location:", dqRep$inst_id,
                   "\n Report year:", dqRep$report_year,
-                  "\n Inpatient cases:", dqRep$case_no_py_ipat,
                   "\n Analyzed cases:", dqRep$case_no_py,
+                  "\n Analyzed patients:", dqRep$patient_no_py,
                   "\n Item completeness rate:", dqRep$item_completeness_rate,
                   "\n Value completeness rate:", dqRep$value_completeness_rate,
                   "\n OrphaCoding completeness rate:", dqRep$orphaCoding_completeness_rate,

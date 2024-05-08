@@ -32,7 +32,6 @@ bundles <- fhir_search(request =searchRequest, username = username, token = toke
 ConditionTab <- fhir_table_description(
   resource = "Condition",
   cols = list(
-    # condition_id = "id",
     patId = "subject/reference",
     encId= "encounter/reference",
     text= "code/text",
@@ -68,12 +67,11 @@ EncounterTab <- fhir_table_description(
   cols = list(
     patId= "subject/reference",
     enId = "id",
-    #enId = "identifier/value",
     start = "period/start",
     end = "period/end",
     class = encounterClass_item,
     status ="status",
-    admitCode ="hospitalization/admitSource/coding/code",  # Aufnahmeanlass
+    admitCode ="hospitalization/admitSource/coding/code",
     diagnosisUse ="diagnosis/use" # admission, billing or discharge
   ),
   style = fhir_style(
