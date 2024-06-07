@@ -99,10 +99,10 @@ if (exists("fhirBundles_max", where = conf) && !is.null(conf$fhirBundles_max)) {
 } else {
   max_FHIRbundles = "inf"
 }
-if (exists("diagnosis_no", where = conf) && !is.null(conf$diagnosis_no)) {
-  diagnosisNo= conf$diagnosis_no
+if (exists("cpuCores_no", where = conf) && !is.null(conf$cpuCores_no)) {
+  cpuCores_no= conf$cpuCores_no
 } else {
-  diagnosisNo= 25
+  cpuCores_no= 4
 }
 
 # v9) check for diagnosis list versions

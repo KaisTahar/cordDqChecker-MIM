@@ -18,7 +18,7 @@ env <- new.env()
 setGlobals <- function(medData, repCol, cdata,ddata, tdata) {
   env$medData <- medData
   env$cdata <- cdata
-  env$ddata <-ddata
+  env$ddata <- ddata
   env$tdata <- tdata
 }
 

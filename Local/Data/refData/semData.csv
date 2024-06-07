@@ -25,6 +25,7 @@ RD Case rel. Frequency,rdCase_rel,rdCase_rel_py_ipat
 Orpha Case rel. Frequency,orphaCase_rel,orphaCase_rel_py_ipat
 Tracer Case rel. Frequency,tracerCase_rel,tracerCase_rel_py_ipat
 Execution Time,exe_time,executionTime_inMin
+CPU cores,cpu_core,cpuCores_no
 Date Reference,date_ref,dateRef
 Data Format,dataFormat,dataFormat
 Encounter Class,enctrClass,encounterClass

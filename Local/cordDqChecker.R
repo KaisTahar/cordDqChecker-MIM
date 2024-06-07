@@ -10,8 +10,11 @@ source("./R/installPackages.R")
 #import dqLib and required packages
 source("./R/dqLibCord.R")
 source("./R/dqLibCore.R")
+source("./R/dqFhirInterface.R")
 library(openxlsx)
 library(stringi)
+library(parallel)
+library(fhircrackr)
 options(warn=-1)# to suppress warnings
 
 cat("####################################***CordDqChecker***########################################### \n \n")
@@ -74,7 +77,6 @@ repHeader <- data.frame(
 )
 repCol <-repHeader$repCol
 
-#repCol=c( "PatientIdentifikator", "Aufnahmenummer", "ICD_Primaerkode","Orpha_Kode")
 #------------------------------------------------------------------------------------------------------
 # Setting DQ dimensions , indicators and parameters
 #------------------------------------------------------------------------------------------------------
@@ -133,39 +135,38 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     msg <- NULL
     dataFormat =""
     dqRep <-NULL
+    x <- NULL
     inpatientCases = 0
     tracer <- cordDiagnosisList
+    diagnosisNo <- length(tracer)/cpuCores_no
     if (toString(reportYear)  %in%  names(ipatCasesList))inpatientCases = ipatCasesList[[toString(reportYear)]]
     if (grepl("fhir", path))
     {
       dataFormat = "FHIR"
-      #tracer <- cordTracer
-      if (length (tracer) > diagnosisNo )
+      if (length(tracer) > diagnosisNo )
       {
         while ( length(tracer) > diagnosisNo) {
           cordTracer.vec <- tail(tracer, diagnosisNo)
           cordTracer <- paste0(cordTracer.vec, collapse=",")
-          print(paste ("cordTracer:",    cordTracer, "NO:", length(cordTracer.vec)))
-          source("./R/dqFhirInterface.R")
-          medData <- base::rbind(medData, instData)
+          x <-append (x, cordTracer)
           tracer <- head(tracer, - diagnosisNo)
         }
         if ( length(tracer) <= diagnosisNo)
         { 
           cordTracer.vec <- tracer
           cordTracer <- paste0(cordTracer.vec, collapse=",")
-          print(paste ("cordTracer:",    cordTracer, "NO:", length(cordTracer.vec)))
-          source("./R/dqFhirInterface.R")
-          medData <- base::rbind(medData, instData)
+          x <-append (x, cordTracer)
         }
+        # Parallel optimization 
+        y <- unlist(mclapply(x,getFhirRequest, diagnosisDate =reportYear))
+        fhirData <- mclapply(y, getFhirData, diagnosisDate_item, encounterClass_item, username, token, password, 2, max_FHIRbundles, mc.cores = cpuCores_no)
+        medData <-base::rbind(medData, Reduce(rbind, fhirData))
         medData <-base::unique(medData)
-        
       } 
       else { 
         if(is.null (cordDiagnosisList)) cordTracer= NULL else cordTracer <- paste0(tracer, collapse=",")
-        print(paste ("cordTracer:",    cordDiagnosisList, "NO:", length(tracer)))
-        source("./R/dqFhirInterface.R")
-        medData<-instData
+        searchRequest <- getFhirRequest (cordTracer, reportYear)
+        medData<-getFhirData(searchRequest, diagnosisDate_item, encounterClass_item)
       }
       if (!is.null(encounterClass_value)) medData<- medData[medData[["Kontakt_Klasse"]]==encounterClass_value, ]
       
@@ -253,12 +254,10 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_allData.csv",  sep = "")
         write.csv(dqRep, expPath, row.names = FALSE)
       }
-      
     }
     next
   }
   if (!("Institut_ID" %in% names(medData))) medData$Institut_ID=institut_ID else if (all(is.na(medData$Institut_ID))) medData$Institut_ID=institut_ID
-  # if ("Orpha_Kode"  %in% names(medData)) medData$Orpha_Kode = NULL
   dItem <-names(medData)
   msg <-cat("\n The following data items are loaded: \n")
   print(paste(msg, dItem))
@@ -283,6 +282,7 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       endTime <- base::Sys.time()
       timeTaken <-  round (as.numeric (endTime - startTime, units = "mins"), 2)
       dqRep$executionTime_inMin <-timeTaken
+      dqRep$cpuCores_no <-cpuCores_no
       dqRep$dateRef <- dateRef
       dqRep$dataFormat <- dataFormat
       dqRep$diagnosesList <- diagnosisListVersion
@@ -335,6 +335,7 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         endTime <- base::Sys.time()
         timeTaken <-  round (as.numeric (endTime - executionTime, units = "mins"), 2)
         dqRep$executionTime_inMin <-timeTaken
+        dqRep$cpuCores_no <-cpuCores_no
         dqRep$dataFormat <- dataFormat
         expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_allData.csv",  sep = "")
         write.csv(tRep, expPath, row.names = FALSE)
@@ -343,3 +344,4 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
   }
   
 }
+
