@@ -124,6 +124,13 @@ dqParam= c(
 allData <- NULL
 iterator=0
 if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
+  inpatientCases = 0
+  tracer <- cordDiagnosisList
+  # Detect the number of CPU cores for parallel computing optimization
+  cpuCores_no= detectCores()
+  # Parallel optimization
+  if (!is.null(parallelComputing) & parallelComputing) diagnosisNo <- round(length(tracer)/cpuCores_no,0)
+  else diagnosisNo <- length(tracer)
   range <-reportYearStart:reportYearEnd
   for ( reportYear in range){
     iterator <- iterator+1
@@ -136,9 +143,6 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     dataFormat =""
     dqRep <-NULL
     x <- NULL
-    inpatientCases = 0
-    tracer <- cordDiagnosisList
-    diagnosisNo <- length(tracer)/cpuCores_no
     if (toString(reportYear)  %in%  names(ipatCasesList))inpatientCases = ipatCasesList[[toString(reportYear)]]
     if (grepl("fhir", path))
     {
@@ -157,18 +161,19 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
           cordTracer <- paste0(cordTracer.vec, collapse=",")
           x <-append (x, cordTracer)
         }
-        # Parallel optimization 
+        
+        #Performance optimization for parallel computing
         y <- unlist(mclapply(x,getFhirRequest, diagnosisDate =reportYear))
-        fhirData <- mclapply(y, getFhirData, diagnosisDate_item, encounterClass_item, username, token, password, 2, max_FHIRbundles, mc.cores = cpuCores_no)
-        medData <-base::rbind(medData, Reduce(rbind, fhirData))
-        medData <-base::unique(medData)
+        results <- mclapply(y, getFhirData, diagnosisDate_item, encounterClass_item, username, token, password, 2, max_FHIRbundles, mc.cores = cpuCores_no)
+        fhirData <- Reduce(rbind, results)
+        medData <-base::unique(fhirData)
       } 
       else { 
         if(is.null (cordDiagnosisList)) cordTracer= NULL else cordTracer <- paste0(tracer, collapse=",")
         searchRequest <- getFhirRequest (cordTracer, reportYear)
-        medData<-getFhirData(searchRequest, diagnosisDate_item, encounterClass_item)
+        medData<-getFhirData(searchRequest, diagnosisDate_item, encounterClass_item, username, token, password, 2, max_FHIRbundles)
       }
-      if (!is.null(encounterClass_value)) medData<- medData[medData[["Kontakt_Klasse"]]==encounterClass_value, ]
+      if (!is.null(encounterClass_value) & "Kontakt_Klasse" %in% colnames(medData)) medData<- medData[medData[["Kontakt_Klasse"]]==encounterClass_value, ]
       
     }else{ 
       ext <-getFileExtension(path)
@@ -192,10 +197,10 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       }else stop("Reference date item is not available")
       if (!is.null(encounterClass_value)) medData<- medData[medData[["Kontakt_Klasse"]]==encounterClass_value, ]
     }
-    if (is.null(medData)) { 
-      dqRep$dataFormat <- dataFormat
-      dqRep$report_year <- reportYear
+    if (is.null(medData)) {
       dqRep$inst_id <- institut_ID 
+      dqRep$report_year <- reportYear
+      dqRep$dataFormat <- dataFormat
       top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
       noDataMsg<- paste("\n No data available for reporting year:", reportYear)
       dqRep$msg <- noDataMsg
@@ -224,10 +229,10 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
         
       }
       next
-  } else if (dim(medData)[1]==0 | all(is.na(medData))) { 
-    dqRep$dataFormat <- dataFormat
-    dqRep$report_year <- reportYear
+  } else if (dim(medData)[1]==0 | all(is.na(medData))) {
     dqRep$inst_id <- institut_ID 
+    dqRep$report_year <- reportYear
+    dqRep$dataFormat <- dataFormat
     top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
     noDataMsg<- paste("\n Empty data set for reporting year:", reportYear)
     dqRep$msg <- noDataMsg
@@ -274,7 +279,8 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       # DQ report
       dqRepCol <- c(repMeta, compInd, plausInd, uniqInd, dqParam)
       out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "DQ_Violations", "basicItem", "Total", oItem, caseItems)
-      dqRep <-out$metric
+      dqRep$st_name <-"CORD-MI"
+      dqRep <-cbind(dqRep, out$metric)
       mItem <-out$mItem
       mx <-dqRep$case_no_py- dqRep$rdCase_no_py
       index <- which(names(dqRep)=="rdCase_no_py")
@@ -282,6 +288,7 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       endTime <- base::Sys.time()
       timeTaken <-  round (as.numeric (endTime - startTime, units = "mins"), 2)
       dqRep$executionTime_inMin <-timeTaken
+      dqRep$parallelComputing <-parallelComputing
       dqRep$cpuCores_no <-cpuCores_no
       dqRep$dateRef <- dateRef
       dqRep$dataFormat <- dataFormat
@@ -292,7 +299,6 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
     ################################################### DQ Reports ########################################################
     expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_", dqRep$report_year,  sep = "")
     rep <-addSemantics (dqRep, semData)
-    #getReport( repHeader, "DQ_Violations", dqRep, expPath)
     getReport( repHeader, "DQ_Violations", rep, expPath)
     
     top <- paste ("\n \n ####################################***CordDqChecker***###########################################")
@@ -330,11 +336,13 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       {
         setGlobals(allData, repCol, cdata, ddata, tdata)
         out <-checkCordDQ(instID, reportYear , inpatientCases, refData1, refData2, dqRepCol,repCol, "dq_msg", "basicItem", "Total", oItem, caseItems)
-        dqRep <-out$metric
-        dqRep$report_year <-  paste (reportYearStart,"-",  reportYearEnd,  sep = "")
+        dqRep$st_name <- "CORD-MI"
+        dqRep <-cbind(dqRep, out$metric)
+        dqRep$report_year <- paste (reportYearStart,"-",  reportYearEnd,  sep = "")
         endTime <- base::Sys.time()
         timeTaken <-  round (as.numeric (endTime - executionTime, units = "mins"), 2)
         dqRep$executionTime_inMin <-timeTaken
+        dqRep$parallelComputing <-parallelComputing
         dqRep$cpuCores_no <-cpuCores_no
         dqRep$dataFormat <- dataFormat
         expPath<- paste ("./Data/Export/", exportFile, "_", institut_ID, "_", dataFormat,"_allData.csv",  sep = "")

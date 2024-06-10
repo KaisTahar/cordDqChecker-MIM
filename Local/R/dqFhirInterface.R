@@ -36,7 +36,8 @@ getFhirRequest<- function(diagnosesList, diagnosisDate){
 }
 
 #' @title getFhirData
-#' @description This function extracts the requested data from the FHIR server (see searchRequest) and converts it to tabular format using fhircrackr
+#' @description This function extracts the requested data from the FHIR server (see searchRequest).
+#' Additionally, it processes the extracted FHIR bundles and converts them into a tabular format using fhircrackr
 #' @import fhircrackr
 #' @export
 #'
@@ -44,7 +45,7 @@ getFhirData<- function(searchRequest, diagnosisDate_item, encounterClass_item, u
 instData <-NULL
 print(paste ("Search request: ", searchRequest, sep = ""))
 # get fhir bundles
-bundles <- fhir_search(request =searchRequest, username = username, token = token, password = password, verbose = verbose, max_bundles =max_FHIRbundles) 
+bundles <- fhir_search(request =searchRequest, username, token, password,  verbose, max_FHIRbundles) 
 #define the table_description
 ConditionTab <- fhir_table_description(
   resource = "Condition",
@@ -98,7 +99,7 @@ EncounterTab <- fhir_table_description(
 design <- fhir_design(ConditionTab, PatientTab, EncounterTab )
 fhirRaw<- fhir_crack(bundles, design)
 condRaw <- fhirRaw$ConditionTab
-instData <-NULL
+
 if (!is.empty (condRaw))
 {
   #sort out codes

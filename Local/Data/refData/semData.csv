@@ -1,6 +1,7 @@
 Label,Abbreviation,SymbolicName
-Organization Name or Identifier ,org_id,inst_id
-Report Year,rep_year,report_year
+Study Name,st_name,st_name
+Organization Name or Identifier,org_id,inst_id
+Report Date (refers to the date or year of data acquisition),rep_date,report_year
 Item Completeness Rate,dqi_co_icr,item_completeness_rate
 Value Completeness Rate,dqi_co_vcr,value_completeness_rate
 Orphacoding Completeness Rate,dqi_co_ocr,orphaCoding_completeness_rate
@@ -26,7 +27,8 @@ Orpha Case rel. Frequency,orphaCase_rel,orphaCase_rel_py_ipat
 Tracer Case rel. Frequency,tracerCase_rel,tracerCase_rel_py_ipat
 Execution Time,exe_time,executionTime_inMin
 CPU cores,cpu_core,cpuCores_no
+Performance Optimization for Parallel Computing,par_computing,parallelComputing
 Date Reference,date_ref,dateRef
-Data Format,dataFormat,dataFormat
-Encounter Class,enctrClass,encounterClass
-Version of Used Diagnosis List,dxList,diagnosesList
+Data Format,data_format,dataFormat
+Encounter Class,enctr_class,encounterClass
+Version of Used Diagnosis List,dx_list,diagnosesList

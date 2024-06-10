@@ -99,12 +99,11 @@ if (exists("fhirBundles_max", where = conf) && !is.null(conf$fhirBundles_max)) {
 } else {
   max_FHIRbundles = "inf"
 }
-if (exists("cpuCores_no", where = conf) && !is.null(conf$cpuCores_no)) {
-  cpuCores_no= conf$cpuCores_no
+if (exists("parallelComputing", where = conf) && !is.null(conf$parallelComputing)) {
+  parallelComputing= conf$parallelComputing
 } else {
-  cpuCores_no= 4
+  parallelComputing= yes
 }
-
 # v9) check for diagnosis list versions
 if (exists("diagnosisList", where = conf) && nchar(conf$diagnosisList) >= 3) {
   diagnosisPath <-conf$diagnosisList
