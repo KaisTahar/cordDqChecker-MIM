@@ -12,7 +12,7 @@ It should be noted that the developed tool supports HL7 FHIR as well as file for
 
 2. Go to the folder `./Local` and edit the file `config.yml` with your local variables
    - Set your custom variables (v1...v5)
-     - Define your organization name (v1) and data input path (v2). This variable specifies which data set should be imported. When importing CSV or Excel data formats,   please define the headers as specified in the examples stored in `Local/Data/medData`. You can, for example, define your path as follows:
+     - Define your organization name (v1) and data input path (v2). This variable specifies which data set should be imported. When importing CSV or Excel data formats, please define the headers as specified in the examples stored in `Local/Data/medData`. You can, for example, define your path as follows:
 	   - ```path="http://141.5.101.1:8080/fhir/" ```
 	  or
 	   - ``` path="./Data/medData/dqTestData.csv" ```
@@ -29,11 +29,12 @@ It should be noted that the developed tool supports HL7 FHIR as well as file for
 
 4. The script generates two files per year analyzed – the first one is a CSV file that contains the calculated DQ metrics, while the second file is an Excel file that contains a report on DQ violations. To enable users to find the DQ violations and causes of these violations, this report provides sensitive information such as Patient Identifier (ID) or case ID – it is meant for internal use only. The generated reports are saved in the folder `./Local/Data/Export`.
 
-## 2. Synthetic Data and Exemplary Reports on Data Quality	
-Here are [exemplary reports](https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools/Local/Data/Export) on DQ generated using synthetic data from [the FHIR test server](http://141.5.101.1:8080). To facilitate testing and reusing of our methods, synthetic data on RDs is made available in both [CSV](https://github.com/KaisTahar/cordDqChecker/blob/bmc_dqTools/Local/Data/medData/syntheticData.csv) and [FHIR](https://github.com/KaisTahar/cordDqChecker/tree/methods_dataCuration/Airolo) formats. These data sets follow the nationwide consented core data set [(MII-CDS)](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set) of the Medical Informatics Initiative [(MII)](https://www.medizininformatik-initiative.de/en/start) and contain randomly introduced DQ issues as described by [Tahar el al.](https://www.thieme-connect.de/products/ejournals/abstract/10.1055/a-2006-1018)
+## 2. Synthetic Data and Exemplary Reports
+Here are [exemplary reports](https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools/Local/Data/Export) on DQ generated using synthetic data from [the FHIR server](http://141.5.101.1:8080). To facilitate testing and reusing of our methods, synthetic data on RDs is made available in both [CSV](https://github.com/KaisTahar/cordDqChecker/blob/bmc_dqTools/Local/Data/medData/syntheticData.csv) and [FHIR](https://github.com/KaisTahar/cordDqChecker/tree/methods_dataCuration/Airolo) formats. These data sets follow the nationwide consented core data set [(MII-CDS)](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set) of the Medical Informatics Initiative [(MII)](https://www.medizininformatik-initiative.de/en/start) and contain randomly introduced DQ issues as described by [Tahar el al.](https://www.thieme-connect.de/products/ejournals/abstract/10.1055/a-2006-1018)
 	
-## 3. Data Quality Metrics
-- The data quality framework [`dqLib`](https://github.com/KaisTahar/dqLib) has been used as an R package for generating specific reports on DQ issues and metrics. The used version of `dqLib` is available in the folder `./Local/R`.
+## 3. Data Quality Metric
+- The data quality library (dqLib) has been used as an R package for generating specific reports on DQ issues and metrics. The developed software `cordDqChecker-BMC` is compatible with [`dqLib 1.5.0`](https://github.com/KaisTahar/dqLib/releases/tag/v1.5.0). To install all required packages, please use the script [`installPackages.R`](https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools/Local/R/installPackages.R) or just run the command `sudo docker-compose up`. This command will install the necessary packages and run the DQ assessment software.
+
 - The following DQ indicators and parameters are configured by default reports:
   | Dimension  | DQ Indicator | 
   | ------------- | ------------- |
@@ -59,7 +60,6 @@ Here are [exemplary reports](https://github.com/KaisTahar/cordDqChecker/tree/bmc
   | implausible links | number of implausible code links per year in a given data set |
   | duplicated RD cases |  number of duplicated RD cases per year in a given data set |
   | ambiguous RD cases | number of ambiguous RD cases per year in a given data set |
-  | mixed cases |  number of mixed cases (both RD and common diseases) per year in a given data set |
 
 - The following references are required to assess the quality of Orphacoding and can be easily updated with new versions: (1) The standard [Alpha-ID-SE](https://github.com/KaisTahar/cordDqChecker/blob/bmc_dqTools/Local/Data/refData/icd10gm2022_alphaidse_edvtxt.txt) terminology [1], and (2) the reference list for [standardized tracer diagnoses](https://github.com/KaisTahar/cordDqChecker/blob/bmc_dqTools/Local/Data/refData/Tracerdiagnosen_AlphaID-SE-2022.csv) provided in [2].
   
@@ -70,18 +70,11 @@ Here are [exemplary reports](https://github.com/KaisTahar/cordDqChecker/tree/bmc
 
 ## 4. Note
 
--  You can also run `cordDqChecker` using Rstudio or Dockerfile. When using Rstudio, all required packages should be installed automatically using the script [`installPackages.R`](https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools/Local/R/installPackages.R). It should be noted that the `fhircrackr` package is only required to run DQ assessments on FHIR data. To avoid local dependency issues go to folder `./Local` and just run the command `sudo docker-compose up` to get `cordDqChecker` running
+-  You can also run `cordDqChecker-BMC` using Rstudio or Dockerfile. When using Rstudio, all required packages should be installed automatically using the script [`installPackages.R`](https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools/Local/R/installPackages.R). It should be noted that the `fhircrackr` package is only required to run DQ assessments on FHIR data. To avoid local dependency issues go to folder `./Local` and just run the command `sudo docker-compose up` to get `cordDqChecker` running
 
 - The missing item rate is calculated based on [FHIR implementation guidlines](https://www.medizininformatik-initiative.de/en/basic-modules-mii-core-data-set) of the MII-CDS. Hence, mandatory items of the basic modules Person, Treatment Case, and Diagnosis are required
 
-- To cite `cordDqChecker-BMC`, please use the following **BibTeX** entry: 
-  ```
-  @software{Tahar_cordDqChecker-BMC,
-  author = {Tahar, Kais},title = {{A set of Metrics and Tools for BMC journal}},
-  url = {https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools},
-  year = {2024}
-  }
+- To cite `cordDqChecker-BMC`, please use the citation file [`CITATION.cff`](https://github.com/KaisTahar/cordDqChecker/blob/bmc_dqTools/CITATION.cff)
 
-  ```
 See also: [`CORD-MI`](https://www.medizininformatik-initiative.de/de/CORD)
 

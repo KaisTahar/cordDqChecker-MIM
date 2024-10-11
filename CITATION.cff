@@ -4,6 +4,7 @@ authors:
 - family-names: "Tahar"
   given-names: "Kais"
   orcid: "https://orcid.org/0000-0001-9683-0575"
-title: "cordDqChecker-MIE2023"
-date-published: 2022-12-31
-url: "https://github.com/KaisTahar/cordDqChecker/tree/mie_2023"
+title: "Data Quality Assessments on Rare Diseases Data – A Set of Metrics and Tools for BMC Journal of Medical Informatics and Decision Making"
+year: 2024
+doi: https://doi.org/21.11101/0000-0007-FB72-E
+url: "https://github.com/KaisTahar/cordDqChecker/tree/bmc_dqTools"

@@ -8,15 +8,17 @@ setwd("./")
 # install required packages
 source("./R/installPackages.R")
 #import dqLib and required packages
-source("./R/dqLibCord.R")
-source("./R/dqLibCore.R")
-source("./R/dqFhirInterface.R")
+library(dqLib)
 library(openxlsx)
 library(stringi)
 library(parallel)
 library(fhircrackr)
 options(warn=-1)# to suppress warnings
-
+if(!require('dqLib')){
+  source("./R/dqLibCord.R")
+  source("./R/dqLibCore.R")
+}
+source("./R/dqFhirInterface.R")
 cat("####################################***CordDqChecker***########################################### \n \n")
 # check missing packages
 pack <- unique(as.data.frame( (installed.packages())[,c(1,3)]))
@@ -28,7 +30,6 @@ if (!is.empty(diff)) paste ("The following packages are missing:", toString (dif
   print(depPkg, quote = TRUE, row.names = FALSE)
 }
 cat ("\n ####################################### Data Import ########################################## \n")
-
 #------------------------------------------------------------------------------------------------------
 # Setting path and local variables
 #------------------------------------------------------------------------------------------------------
@@ -282,9 +283,6 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
       dqRep$st_name <-"CORD-MI"
       dqRep <-cbind(dqRep, out$metric)
       mItem <-out$mItem
-      mx <-dqRep$case_no_py- dqRep$rdCase_no_py
-      index <- which(names(dqRep)=="rdCase_no_py")
-      dqRep <- data.frame(dqRep[1:index],mxCases_no_py=mx,dqRep[(index+1):ncol(dqRep)])
       endTime <- base::Sys.time()
       timeTaken <-  round (as.numeric (endTime - startTime, units = "mins"), 2)
       dqRep$executionTime_inMin <-timeTaken
@@ -352,4 +350,3 @@ if (is.null(path) | path=="" | is.na(path)) stop("No path to data") else {
   }
   
 }
-

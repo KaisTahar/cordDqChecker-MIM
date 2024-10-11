@@ -19,7 +19,6 @@ Implausible Links,link_ip,implausible_codeLink_no_py
 Ambiguous RD Cases,rdCase_amb,ambiguous_rdCase_no_py
 Duplicated RD Cases,rdCase_dup,duplicateRdCase_no_py
 RD Cases,rdCase,rdCase_no_py
-Mixed Cases,mxCase,mxCases_no_py
 Orpha Cases,orphaCase,orphaCase_no_py
 Tracer Cases,tracerCase,tracerCase_no_py
 RD Case rel. Frequency,rdCase_rel,rdCase_rel_py_ipat
